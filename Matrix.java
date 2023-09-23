@@ -99,4 +99,12 @@ public class Matrix {
             e.printStackTrace();
         }
     }
+
+    public double getElmt(int i, int j) {
+        return this.data[i][j];
+    }
+
+    public void setElmt(int i, int j, float val) {
+        this.data[i][j] = val;
+    }
 }
