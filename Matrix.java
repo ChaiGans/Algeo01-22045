@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Matrix {
-    private float[][] data; // The matrix data
+    private double[][] data; // The matrix data
     private int jumlahBaris; // Number of rows
     private int jumlahKolom; // Number of columns
 
@@ -14,13 +14,13 @@ public class Matrix {
 
         this.jumlahBaris = rows;
         this.jumlahKolom = columns;
-        this.data = new float[rows][columns];
+        this.data = new double[rows][columns];
     }
 
     public Matrix() {
         this.jumlahBaris = 0;
         this.jumlahKolom = 0;
-        this.data = new float[0][0];
+        this.data = new double[0][0];
     }
 
     public void printMatriks() {
@@ -44,7 +44,7 @@ public class Matrix {
         for (int i = 0; i < this.jumlahBaris; i++) {
             String[] inputValues = scanner.nextLine().split(" ");
             for (int j = 0; j < this.jumlahKolom; j++) {
-                this.data[i][j] = Float.parseFloat(inputValues[j]);
+                this.data[i][j] = Double.parseDouble(inputValues[j]);
             }
         }
         scanner.close();
@@ -73,7 +73,7 @@ public class Matrix {
                 this.jumlahKolom = inputValues.length;
             }
 
-            this.data = new float[jumlahBaris][jumlahKolom];
+            this.data = new double[jumlahBaris][jumlahKolom];
 
             sc.close();
 
@@ -87,7 +87,7 @@ public class Matrix {
             while (sc.hasNextLine()) {
                 String[] inputValues = sc.nextLine().split(" ");
                 for (int j = 0; j < inputValues.length; j++) {
-                    this.data[i][j] = Float.parseFloat(inputValues[j]);
+                    this.data[i][j] = Double.parseDouble(inputValues[j]);
                 }
                 i++;
             }
@@ -104,7 +104,34 @@ public class Matrix {
         return this.data[i][j];
     }
 
-    public void setElmt(int i, int j, float val) {
+    public void setElmt(int i, int j, double val) {
         this.data[i][j] = val;
+    }
+
+    public int getBaris(){
+        return this.jumlahBaris;
+    }
+
+    public int getKolom(){
+        return this.jumlahKolom;
+    }
+
+    public Matrix changeRow(int i1, int i2){
+        Matrix m = new Matrix(this.jumlahBaris,this.jumlahKolom);
+
+        int i,j;
+        for(i = 0; i < this.jumlahBaris ; i++){
+            for (j = 0; j < this.jumlahKolom ; j++){
+                if(i == i1 ){
+                    m.setElmt(i, j, this.getElmt(i2, j));
+                }else if(i == i2){
+                    m.setElmt(i, j, this.getElmt(i1, j));
+                }else{
+                    m.setElmt(i, j, this.getElmt(i, j));
+                }
+            }
+        }
+
+        return m;
     }
 }
