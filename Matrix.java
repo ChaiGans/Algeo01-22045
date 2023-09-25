@@ -190,4 +190,16 @@ public class Matrix {
 
         return dummyMatrix;
     }
+    public Matrix copyMatrix() {
+        Matrix mKeluar = new Matrix(this.jumlahBaris, this.jumlahKolom);
+        int i, j;
+        mKeluar.jumlahBaris = this.jumlahBaris;
+        mKeluar.jumlahKolom = this.jumlahKolom;
+        for (i = 0; i < this.jumlahBaris; i++) {
+            for (j = 0; j < this.jumlahKolom; j++) {
+                mKeluar.data[i][j] = this.data[i][j];
+            }
+        }
+        return mKeluar;
+    }
 }
