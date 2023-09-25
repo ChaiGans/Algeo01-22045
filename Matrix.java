@@ -8,10 +8,6 @@ public class Matrix {
     private int jumlahKolom; // Number of columns
 
     public Matrix(int rows, int columns) {
-        if (rows <= 0 || columns <= 0) {
-            throw new IllegalArgumentException("Matrix dimensions must be positive.");
-        }
-
         this.jumlahBaris = rows;
         this.jumlahKolom = columns;
         this.data = new double[rows][columns];
@@ -133,5 +129,65 @@ public class Matrix {
         }
 
         return m;
+    }
+
+    public Matrix subMatrix(int a, int b) {    
+        int i, j, k, l;
+        k = 0;
+        l = 0;
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris-1, this.jumlahKolom-1);
+
+        for (i=0; i<this.jumlahBaris; i++) {
+            for (j=0; j<this.jumlahKolom; j++) {
+                if (i!=a && j!=b) {
+                    dummyMatrix.data[k][l] = this.data[i][j];
+                    l += 1;
+                } 
+            }
+            if (l == dummyMatrix.jumlahKolom) {
+                k+=1;
+                l=0;
+            }
+        }
+        return dummyMatrix;
+    }
+
+    public double determinantWithCofExpansion() {
+        int j;
+        double sum = 0;
+
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom);
+        int i;
+        for (i=0; i<dummyMatrix.jumlahBaris; i++) {
+            for (j=0; j<dummyMatrix.jumlahKolom; j++) {
+                dummyMatrix.data[i][j] = this.data[i][j];
+            }
+        }
+
+        /* Menghitung nilai determinan m */
+        if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
+            return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
+        } else {
+            for (j = 0; j < this.jumlahKolom; j++) {
+                if (j % 2 == 0) {
+                    sum += dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                } else {
+                    sum -= dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                }
+            }
+        }
+        return sum;
+    }
+
+    public Matrix makeItSquare () {
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom-1);
+        int i, j;
+        for (i=0; i<dummyMatrix.jumlahBaris; i++) {
+            for (j=0; j<dummyMatrix.jumlahKolom; j++) {
+                dummyMatrix.setElmt(i, j, this.getElmt(i, j));
+            }
+        }
+
+        return dummyMatrix;
     }
 }
