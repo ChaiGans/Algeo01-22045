@@ -33,9 +33,6 @@ public class Matrix {
 
         Scanner scanner = new Scanner(System.in);
 
-        // Inisialisasi matriks
-        // Matrix dummyMatrix = new Matrix(n, m);
-
         // Perulangan (Looping) untuk meminta dan mengisi isian matriks
         for (int i = 0; i < this.jumlahBaris; i++) {
             String[] inputValues = scanner.nextLine().split(" ");
@@ -43,7 +40,6 @@ public class Matrix {
                 this.data[i][j] = Double.parseDouble(inputValues[j]);
             }
         }
-        scanner.close();
     }
 
     public void bacaMatriksDariFile(String filename) {
@@ -57,8 +53,6 @@ public class Matrix {
             // Hal tersebut bertujuan agar dapat dilakukan inisialisasi dummyMatrix dengan panjang kolom dan baris yang fixed
             Scanner sc = new Scanner(file);
 
-            // int jumlahBaris = 0;
-            // int jumlahKolom = 0;
             this.jumlahBaris = 0;
             this.jumlahKolom = 0;
 
@@ -76,7 +70,6 @@ public class Matrix {
             // Pembukaan atau pembacaan file yang sama kedua kalinya, untuk melakukan parsing yang bertujuan untuk memindahkan
             // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel dummyMatrix
             sc = new Scanner(file);
-            // dummyMatrix = new float[jumlahBaris][jumlahKolom];
 
             // Then, read and fill the matrix
             int i = 0;
@@ -92,7 +85,9 @@ public class Matrix {
 
         // catch bertujuan untuk menampilkan error kepada user
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("File "+filename+" not found in this directory.");
+            System.out.println("Program will shut down. Please re-run the program");
+            System.exit(0);
         }
     }
 
@@ -190,76 +185,114 @@ public class Matrix {
 
         return dummyMatrix;
     }
+
     public Matrix copyMatrix() {
-        Matrix mKeluar = new Matrix(this.jumlahBaris, this.jumlahKolom);
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom);
         int i, j;
-        mKeluar.jumlahBaris = this.jumlahBaris;
-        mKeluar.jumlahKolom = this.jumlahKolom;
+        dummyMatrix.jumlahBaris = this.jumlahBaris;
+        dummyMatrix.jumlahKolom = this.jumlahKolom;
         for (i = 0; i < this.jumlahBaris; i++) {
             for (j = 0; j < this.jumlahKolom; j++) {
-                mKeluar.data[i][j] = this.data[i][j];
+                dummyMatrix.data[i][j] = this.data[i][j];
             }
         }
-        return mKeluar;
+        return dummyMatrix;
     }
 
-    public Matrix gauss(Matrix mMasuk){
-        Matrix mKeluar = new Matrix();
-        mKeluar = mMasuk.copyMatrix();
-        int baris = mKeluar.getBaris();
-        int kolom = mKeluar.getKolom();
+    public Matrix gauss(){
+        Matrix dummyMatrix = new Matrix();
+        dummyMatrix = this.copyMatrix();
+        int baris = dummyMatrix.getBaris();
+        int kolom = dummyMatrix.getKolom();
 
-        // while(j < kolom && ketemu == false){
-        //     for(i = 0;i < baris; i++){
-        //         if(mKeluar.getElmt(i, j) == 1){
-        //         ketemu = false;
-        //     }
-        //     }
-        //     j += 1;
-        // }
-
-        // if(ketemu && i != 0){
-        //     mKeluar = mKeluar.changeRow(0, i);
-        // }
-
-        // double pembagi;
-
-        // pembagi = mKeluar.getElmt(0, 0)
         int a = 0;
         boolean tidakNol = false;
         for (int i = 0; i < baris ; i++){
-            if(mKeluar.getElmt(i, i) == 0){
-                for(int j = i+1; j< baris; j++){
-                    if(mKeluar.getElmt(j, i) != 0){
-                        mKeluar= mKeluar.changeRow(i, j);
-                        tidakNol = true;
+            tidakNol = false;
+            while(tidakNol == false && i+a <kolom){
+                if(dummyMatrix.getElmt(i, i+a) == 0){         
+                    for(int j = i+1; j< baris; j++){
+                        if(dummyMatrix.getElmt(j, i+a) != 0){
+                            dummyMatrix= dummyMatrix.changeRow(i, j);
+                            tidakNol = true;
+                        }
+                    } 
+                    if(tidakNol == false){
+                        a += 1;
                     }
-                } 
-                if(tidakNol == false){
-                    a += 1;
+                 }else{
+                    tidakNol = true;
+                 }
+            }
+
+            if (i + a < kolom){
+                double pembagi = dummyMatrix.getElmt(i, i+a);
+                for( int k = (i +a) ; k < kolom; k++){
+                    if(dummyMatrix.getElmt(i,k) != 0D){
+                        dummyMatrix.setElmt(i, k,(double)dummyMatrix.getElmt(i, k)/ (double) pembagi);
+                    }
+                    
                 }
+
+                for (int j = i +1 ; j < baris ; j ++){
+                    double faktorPengali = dummyMatrix.getElmt(j, i+a);
+                    for (int k = i +a; k < kolom ; k++){
+                        double hasilTemp = dummyMatrix.getElmt(j, k) - (faktorPengali * dummyMatrix.getElmt(i,k));
+                        dummyMatrix.setElmt(j, k, hasilTemp);
+                    }
+                }
+            }
+        }   
+        return dummyMatrix;
+    }
+
+    public Matrix gaussJordan(){
+        Matrix dummyMatrix = new Matrix();
+        dummyMatrix = this.copyMatrix();
+        int baris = dummyMatrix.getBaris();
+        int kolom = dummyMatrix.getKolom();
+
+        int a = 0;
+        boolean tidakNol = false;
+        for (int i = 0; i < baris ; i++){
+            tidakNol = false;
+            while(tidakNol == false && i+a <kolom){
+                if(dummyMatrix.getElmt(i, i+a) == 0){         
+                    for(int j = i+1; j< baris; j++){
+                        if(dummyMatrix.getElmt(j, i+a) != 0){
+                            dummyMatrix= dummyMatrix.changeRow(i, j);
+                            tidakNol = true;
+                        }
+                    } 
+                    if(tidakNol == false){
+                        a += 1;
+                    }
+                    
+                } else{
+                    tidakNol = true;
+                }
+
             }
             if (i + a < kolom){
-                double pembagi = mKeluar.getElmt(i, i+a);
+                double pembagi = dummyMatrix.getElmt(i, i+a);
                 for( int k = (i +a) ; k < kolom; k++){
-                mKeluar.setElmt(i, k,(double)mKeluar.getElmt(i, k)/ (double) pembagi);
+                    if(dummyMatrix.getElmt(i,k) != 0D){
+                        dummyMatrix.setElmt(i, k,(double)dummyMatrix.getElmt(i, k)/ (double) pembagi);
+                    }
+                    
                 }
 
-                for (int j = i +a +1 ; j < baris ; j ++){
-                    double faktorPengali = mKeluar.getElmt(j, i+a);
-                    for (int k = i +a; k < kolom ; k++){
-                        double hasilTemp = mKeluar.getElmt(j, k) - (faktorPengali*mKeluar.getElmt(i,k));
-                        mKeluar.setElmt(j, k, hasilTemp);
+                for (int j = 0 ; j < baris ; j ++){
+                    if(j != i){
+                        double faktorPengali = dummyMatrix.getElmt(j, i+a);
+                        for (int k = i +a; k < kolom ; k++){
+                            double hasilTemp = dummyMatrix.getElmt(j, k) - (faktorPengali * dummyMatrix.getElmt(i,k));
+                            dummyMatrix.setElmt(j, k, hasilTemp);
+                        }
                     }
                 }
             }
-            
-            
-              
-            
         }   
-
-
-        return mKeluar;
+        return dummyMatrix;
     }
 }
