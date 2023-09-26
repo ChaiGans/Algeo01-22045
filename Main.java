@@ -119,6 +119,7 @@ public class Main {
         System.out.printf("\n");
     }
     public static void WRONG_INPUT_REMINDER () {
+        CLEAR_TERMINAL();
         System.out.println("I gotta remind you that the input must be within the specified range.");
         System.out.println("Your input must be a valid integer number to proceed.");
         System.out.printf("\n");
@@ -128,14 +129,41 @@ public class Main {
         System.out.print("Which option do you like to proceed? ");
     }
 
+    public static boolean REUSE_CONFIRMATION (Scanner scanner) {
+        System.out.printf("\n");
+        System.out.println("Do you want to reuse the program or exit the program?");
+        System.out.println("1. Wanted to do another operation");
+        System.out.println("2. Exit program");
+        System.out.printf("\n");
+        int choice;
+        do {
+            ASK_FOR_CHOICE_MESSAGE();
+            choice = scanner.nextInt();
+            scanner.nextLine();
+        } while (choice <= 0 || choice > 2);
+        if (choice == 1) {
+            return true;
+        } else if (choice == 2) {
+            CLEAR_TERMINAL();
+            System.out.println("God bless you ! Hope you enjoy JUN HOK 88's work.");
+            System.out.println("Signing out...");
+            System.out.println("Program terminated");
+            System.exit(0);
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         int mainMenuChoice = 0;
         Scanner scanner = new Scanner(System.in);
         boolean previousMenu = false;
+        boolean reuseConfirmation;
         do {
+            CLEAR_TERMINAL();
             SHOW_GREETINGS_TO_USER();
             SHOW_MAIN_MENU();
             ASK_FOR_CHOICE_MESSAGE();
+            reuseConfirmation = false;
             try {
                 mainMenuChoice = scanner.nextInt();
                 scanner.nextLine(); 
@@ -155,17 +183,25 @@ public class Main {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                                 System.out.println("The result of Gauss method for the system of linear equation is the following :");
                                 currentMatrix.gauss().printMatriks();
+
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
                                 
                             } else if (linearEqSubMenuChoice == 2) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                                 System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
                                 currentMatrix.gaussJordan().printMatriks();
 
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
+
                             } else if (linearEqSubMenuChoice == 3) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
 
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
+
                             } else if (linearEqSubMenuChoice == 4) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                             } else if (linearEqSubMenuChoice == 5) {
                                 previousMenu = true;
@@ -175,6 +211,7 @@ public class Main {
                             }
                         } catch (InputMismatchException e) {
                             scanner.nextLine();
+                            CLEAR_TERMINAL();
                             System.out.println("Oops! Looks like you didn't enter a valid integer.");
                             System.out.println("Please enter a valid integer to proceed.");
                             System.out.printf("\n");
@@ -196,10 +233,14 @@ public class Main {
                             if (determinantSubMenuChoice == 1) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
 
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
+
                             } else if (determinantSubMenuChoice == 2) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                                 System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
                                 System.out.println(currentMatrix.makeItSquare().determinantWithCofExpansion());
+
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                             } else if (determinantSubMenuChoice == 3) {
                                 previousMenu = true;
@@ -209,6 +250,7 @@ public class Main {
                             }
                         } catch (InputMismatchException e) {
                             scanner.nextLine();
+                            CLEAR_TERMINAL();
                             System.out.println("Oops! Looks like you didn't enter a valid integer.");
                             System.out.println("Please enter a valid integer to proceed.");
                             System.out.printf("\n");
@@ -230,8 +272,12 @@ public class Main {
                             if (inverseSubMenuChoice == 1) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
 
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
+
                             } else if (inverseSubMenuChoice == 2) {
                                 Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+
+                                reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                             } else if (inverseSubMenuChoice == 3) {
                                 previousMenu = true;
@@ -241,6 +287,7 @@ public class Main {
                             }
                         } catch (InputMismatchException e) {
                             scanner.nextLine();
+                            CLEAR_TERMINAL();
                             System.out.println("Oops! Looks like you didn't enter a valid integer.");
                             System.out.println("Please enter a valid integer to proceed.");
                             System.out.printf("\n");
@@ -261,11 +308,12 @@ public class Main {
                 }
             } catch (InputMismatchException e) {
                 scanner.nextLine();
+                CLEAR_TERMINAL();
                 System.out.println("Oops! Looks like you didn't enter a valid integer.");
                 System.out.println("Please enter a valid integer to proceed.");
                 System.out.printf("\n");
             }
-        } while (mainMenuChoice <= 0 || mainMenuChoice > 7 || previousMenu);
+        } while (mainMenuChoice <= 0 || mainMenuChoice > 7 || previousMenu || reuseConfirmation);
         scanner.close();
 
         // SHOW_GREETINGS_TO_USER();
