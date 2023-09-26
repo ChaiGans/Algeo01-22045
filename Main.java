@@ -38,7 +38,6 @@ public class Main {
         System.out.println("2. By reading .txt file");
         System.out.println();
 
-        ASK_FOR_CHOICE_MESSAGE();
         choice = GET_VALID_CHOICE(scanner, 1, 2, 5);
         Matrix currentMatrix = INPUT_MATRIX(choice, scanner);
         System.out.println();
@@ -226,7 +225,6 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         do {     
             SHOW_GREETINGS_TO_USER();
             SHOW_MAIN_MENU();
-            ASK_FOR_CHOICE_MESSAGE();
             reuseConfirmation = false;         
             mainMenuChoice = GET_VALID_CHOICE(scanner, 1, 7, 1);
             if (mainMenuChoice == 1) { // Linear of Equation System
@@ -236,7 +234,6 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_LINEAR_EQUATION_SUBMENU();
                     previousMenu = false;
-                    ASK_FOR_CHOICE_MESSAGE();
                         linearEqSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 5, 2);
                         CLEAR_TERMINAL();
                         if (linearEqSubMenuChoice == 1) {
@@ -277,18 +274,17 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_DETERMINANT_SUBMENU();
                     previousMenu = false;
-                    ASK_FOR_CHOICE_MESSAGE();            
                     determinantSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 3);
                     CLEAR_TERMINAL();
                     if (determinantSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        currentMatrix.operasiBarisElementer();
+                        // currentMatrix.operasiBarisElementer();
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 2) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                         System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
-                        System.out.println(currentMatrix.makeItSquare().determinantWithCofExpansion());
+                        System.out.println(currentMatrix.determinantWithCofExpansion());
 
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -304,13 +300,12 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 do {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_INVERSE_SUBMENU();
-                    previousMenu = false;
-                    ASK_FOR_CHOICE_MESSAGE();                   
+                    previousMenu = false;                
                     inverseSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 4);
                     CLEAR_TERMINAL();
                     if (inverseSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-
+                        currentMatrix.inverseWithAdjMethod();
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (inverseSubMenuChoice == 2) {
