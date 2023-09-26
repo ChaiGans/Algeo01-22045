@@ -420,6 +420,31 @@ public class Matrix {
         }
     }
 
+     public boolean isNoSolution(int i){
+        for (int j = 0; j < this.jumlahKolom; j++){
+            if(j != this.jumlahKolom -1){
+                if(this.data[i][j] != 0){
+                    return false;
+                }
+            }else{
+                if(this.data[i][j] == 0){
+                    return false;
+                }
+            }
+            
+        }
+        return true;
+    }
+
+    public boolean isAllZero(int i){
+        for (int j = 0; j < this.jumlahKolom; j++){
+            if(this.data[i][j] != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     
 
