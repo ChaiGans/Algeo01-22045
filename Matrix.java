@@ -23,7 +23,7 @@ public class Matrix {
         // Prosedur untuk mencetak matriks kepada user
         for (int i = 0; i < this.jumlahBaris; i++) {
             for (int j = 0; j < this.jumlahKolom; j++) {
-                System.out.printf("%.2f ", this.data[i][j]);
+                System.out.printf("%f \t", this.data[i][j]);
             }
             System.out.println();
         }
@@ -173,16 +173,16 @@ public class Matrix {
         l = 0;
         Matrix dummyMatrix = new Matrix(this.jumlahBaris-1, this.jumlahKolom-1);
 
-        for (i=0; i<this.jumlahBaris; i++) {
-            for (j=0; j<this.jumlahKolom; j++) {
-                if (i!=a && j!=b) {
-                    dummyMatrix.data[k][l] = this.data[i][j];
-                    l += 1;
-                } 
-            }
-            if (l == dummyMatrix.jumlahKolom) {
-                k+=1;
-                l=0;
+        for (i = 0; i < this.jumlahBaris; i++) {
+            if (i != a) {
+                for (j = 0; j < this.jumlahKolom; j++) {
+                    if (j != b) { 
+                        dummyMatrix.data[k][l] = this.data[i][j];
+                        l += 1;
+                    } 
+                }
+                k += 1;
+                l = 0;
             }
         }
         return dummyMatrix;
@@ -192,13 +192,7 @@ public class Matrix {
         int j;
         double sum = 0;
 
-        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom);
-        int i;
-        for (i=0; i<dummyMatrix.jumlahBaris; i++) {
-            for (j=0; j<dummyMatrix.jumlahKolom; j++) {
-                dummyMatrix.data[i][j] = this.data[i][j];
-            }
-        }
+        Matrix dummyMatrix = this.copyMatrix();
 
         /* Menghitung nilai determinan m */
         if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
@@ -351,34 +345,74 @@ public class Matrix {
         return dummyMatrix;
     }
 
-    public void operasiBarisElementer() {
-        if (this.isGotDeterminant()) {
-            int i, j, l;
-            int k;
-
-            k=1;
-
-            for (i = 0; i<this.getKolom()-1; i++) {
-                for (j = 1+i; j<this.getBaris(); j++) {
-                    if (this.getElmt(j, i) != 0) {
-                        double rasioPembuatNol = this.getElmt(j, i) / this.getElmt(j-k, i);
-
-                        for (l = 0; l<this.getKolom(); l++) {
-                            this.setElmt(j, l, getElmt(j, l)-rasioPembuatNol*this.getElmt((j-k), l));
-                        }
-                        this.printMatriks();
-                        System.out.printf("\n");
-                        k+=1;
-                    } else {
-
-                    }
+    public Matrix adjoinMatrix () {
+        Matrix dummyMatrix = this.copyMatrix();
+        int i, j;
+        for (i=0; i<dummyMatrix.getBaris(); i++) {
+            for (j=0; j<dummyMatrix.getKolom(); j++) {
+                if ((i+j)%2 == 0) {
+                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithCofExpansion());
+                } else {
+                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithCofExpansion());
                 }
-                k=1;
-                this.printMatriks();
-                System.out.printf("\n");
             }
+        }
+
+        Matrix transposedMatrix = dummyMatrix.copyMatrix();
+        for (i=0; i<dummyMatrix.getBaris(); i++) {
+            for (j=0; j<dummyMatrix.getKolom(); j++) {
+                transposedMatrix.setElmt(i, j, dummyMatrix.getElmt(j, i));
+            }
+        }
+
+        return transposedMatrix;
+    }
+
+    public void inverseWithAdjMethod () {
+        Matrix dummyMatrix = this.copyMatrix();
+        int i, j;
+        if (dummyMatrix.determinantWithCofExpansion() == 0) {
+            System.out.println("This matrix does not have inverse.");
         } else {
-            System.out.println("This matrix do not have any determinant.");
+            double saveDeterminant = dummyMatrix.determinantWithCofExpansion();
+            dummyMatrix = dummyMatrix.adjoinMatrix();
+            for (i=0; i<dummyMatrix.getBaris(); i++) {
+                for (j=0; j<dummyMatrix.getKolom(); j++) {
+                    dummyMatrix.setElmt(i, j, 1/saveDeterminant * dummyMatrix.getElmt(i, j));
+                }
+            }
+            dummyMatrix.printMatriks();
         }
     }
+
+    // public void operasiBarisElementer() {
+    //     if (this.isGotDeterminant()) {
+    //         int i, j, l;
+    //         int k;
+
+    //         k=1;
+
+    //         for (i = 0; i<this.getKolom()-1; i++) {
+    //             for (j = 1+i; j<this.getBaris(); j++) {
+    //                 if (this.getElmt(j, i) != 0) {
+    //                     double rasioPembuatNol = this.getElmt(j, i) / this.getElmt(j-k, i);
+
+    //                     for (l = 0; l<this.getKolom(); l++) {
+    //                         this.setElmt(j, l, getElmt(j, l)-rasioPembuatNol*this.getElmt((j-k), l));
+    //                     }
+    //                     this.printMatriks();
+    //                     System.out.printf("\n");
+    //                     k+=1;
+    //                 } else {
+
+    //                 }
+    //             }
+    //             k=1;
+    //             this.printMatriks();
+    //             System.out.printf("\n");
+    //         }
+    //     } else {
+    //         System.out.println("This matrix do not have any determinant.");
+    //     }
+    // }
 }
