@@ -98,7 +98,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.println("Finding determinant of the matrix.");
         System.out.println("But... with what method ?");
         System.out.println("==================================================");
-        System.out.println("1. 'Reduksi Baris' Method"); // TARGET
+        System.out.println("1. 'Reduksi Baris' Method"); // TARGET**
         System.out.println("2. Cofactor Expansion Method"); // DONE
         System.out.println("3. Back to previous menu."); 
         System.out.printf("\n");
@@ -112,7 +112,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.println("1. Gauss Elimination Method"); // DONE
         System.out.println("2. Gauss-Jordan Elimination Method"); // DONE
         System.out.println("3. Inverse Matrix Method");
-        System.out.println("4. Cramer's Rule Method"); // TARGET
+        System.out.println("4. Cramer's Rule Method"); // DONE
         System.out.println("5. Back to previous menu."); // TARGET
         System.out.printf("\n");
     }
@@ -260,6 +260,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                         } else if (linearEqSubMenuChoice == 4) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            currentMatrix.SPLwithCramerMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -281,7 +282,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     CLEAR_TERMINAL();
                     if (determinantSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-
+                        currentMatrix.operasiBarisElementer();
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 2) {
