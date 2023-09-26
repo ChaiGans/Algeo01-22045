@@ -103,6 +103,47 @@ public class Matrix {
         return this.jumlahKolom;
     }
 
+    public Matrix makeItSquare () {
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom-1);
+        int i, j;
+        for (i=0; i<dummyMatrix.jumlahBaris; i++) {
+            for (j=0; j<dummyMatrix.jumlahKolom; j++) {
+                dummyMatrix.setElmt(i, j, this.getElmt(i, j));
+            }
+        }
+
+        return dummyMatrix;
+    }
+
+    public Matrix copyMatrix() {
+        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom);
+        int i, j;
+        dummyMatrix.jumlahBaris = this.jumlahBaris;
+        dummyMatrix.jumlahKolom = this.jumlahKolom;
+        for (i = 0; i < this.jumlahBaris; i++) {
+            for (j = 0; j < this.jumlahKolom; j++) {
+                dummyMatrix.data[i][j] = this.data[i][j];
+            }
+        }
+        return dummyMatrix;
+    }
+
+    public static Matrix multiplyMatrix (Matrix m1, Matrix m2) {
+        Matrix dummyMatrix = new Matrix(m1.getBaris(), m2.getKolom());
+        int i, j, k, sum;
+        for (i=0; i<m1.getBaris(); i++) {
+            for (j=0; j<m2.getKolom(); j++) {
+                sum = 0;
+                for (k=0; k<m1.getKolom(); k++) {
+                    sum += m1.getElmt(i, k) * m2.getElmt(k, j);
+                }
+                dummyMatrix.setElmt(i, j, sum);
+            }
+        }
+        return dummyMatrix;
+    }
+
+
     public Matrix changeRow(int i1, int i2){
         Matrix m = new Matrix(this.jumlahBaris,this.jumlahKolom);
 
@@ -220,31 +261,6 @@ public class Matrix {
             System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
             dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
         }
-    }
-
-    public Matrix makeItSquare () {
-        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom-1);
-        int i, j;
-        for (i=0; i<dummyMatrix.jumlahBaris; i++) {
-            for (j=0; j<dummyMatrix.jumlahKolom; j++) {
-                dummyMatrix.setElmt(i, j, this.getElmt(i, j));
-            }
-        }
-
-        return dummyMatrix;
-    }
-
-    public Matrix copyMatrix() {
-        Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom);
-        int i, j;
-        dummyMatrix.jumlahBaris = this.jumlahBaris;
-        dummyMatrix.jumlahKolom = this.jumlahKolom;
-        for (i = 0; i < this.jumlahBaris; i++) {
-            for (j = 0; j < this.jumlahKolom; j++) {
-                dummyMatrix.data[i][j] = this.data[i][j];
-            }
-        }
-        return dummyMatrix;
     }
 
     public Matrix gauss(){
@@ -368,7 +384,7 @@ public class Matrix {
         return transposedMatrix;
     }
 
-    public void inverseWithAdjMethod () {
+    public Matrix inverseWithAdjMethod () {
         Matrix dummyMatrix = this.copyMatrix();
         int i, j;
         if (dummyMatrix.determinantWithCofExpansion() == 0) {
@@ -381,9 +397,31 @@ public class Matrix {
                     dummyMatrix.setElmt(i, j, 1/saveDeterminant * dummyMatrix.getElmt(i, j));
                 }
             }
-            dummyMatrix.printMatriks();
+        }
+        return dummyMatrix;
+    }
+
+    public void SPLwithInverseMethod() {
+        Matrix dummyMatrix = this.copyMatrix();
+        Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+        A.printMatriks();
+        Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
+
+        for (int i = 0; i < dummyMatrix.getBaris(); i++) {
+            B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+        }
+        B.printMatriks();
+
+        Matrix solution = multiplyMatrix(A, B);
+        solution.printMatriks();
+
+        for (int i = 0; i < solution.getBaris(); i++) {
+            System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
         }
     }
+
+
+    
 
     // public void operasiBarisElementer() {
     //     if (this.isGotDeterminant()) {

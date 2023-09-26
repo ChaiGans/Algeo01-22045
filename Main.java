@@ -97,7 +97,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.println("Finding determinant of the matrix.");
         System.out.println("But... with what method ?");
         System.out.println("==================================================");
-        System.out.println("1. 'Reduksi Baris' Method"); // TARGET**
+        System.out.println("1. 'Reduksi Baris' Method"); // TARGET
         System.out.println("2. Cofactor Expansion Method"); // DONE
         System.out.println("3. Back to previous menu."); 
         System.out.printf("\n");
@@ -112,7 +112,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.println("2. Gauss-Jordan Elimination Method"); // DONE
         System.out.println("3. Inverse Matrix Method");
         System.out.println("4. Cramer's Rule Method"); // DONE
-        System.out.println("5. Back to previous menu."); // TARGET
+        System.out.println("5. Back to previous menu.");
         System.out.printf("\n");
     }
 
@@ -121,7 +121,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.println("Finding the inverse of the matrix.");
         System.out.println("But... with what method?");
         System.out.println("==================================================");
-        System.out.println("1. Adjoint Matrix Method"); // TARGET
+        System.out.println("1. Adjoint Matrix Method"); // DONE
         System.out.println("2. Elementary Row Transformation Method"); // TARGET
         System.out.println("3. Back to previous menu."); // TARGET
         System.out.printf("\n");
@@ -252,11 +252,14 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                         } else if (linearEqSubMenuChoice == 3) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            System.out.println("The result of Inverse Method (AX=B -> X=(A^-1)B) method for the system of linear equation is the following :");
+                            currentMatrix.SPLwithInverseMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                         } else if (linearEqSubMenuChoice == 4) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
                             currentMatrix.SPLwithCramerMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
@@ -305,7 +308,8 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     CLEAR_TERMINAL();
                     if (inverseSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        currentMatrix.inverseWithAdjMethod();
+                        currentMatrix = currentMatrix.inverseWithAdjMethod();
+                        currentMatrix.printMatriks();
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (inverseSubMenuChoice == 2) {
