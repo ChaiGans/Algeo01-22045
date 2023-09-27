@@ -103,6 +103,31 @@ public class Matrix {
         return this.jumlahKolom;
     }
 
+    public boolean isNoSolution(int i){
+        for (int j = 0; j < this.jumlahKolom; j++){
+            if(j != this.jumlahKolom -1){
+                if(this.data[i][j] != 0){
+                    return false;
+                }
+            }else{
+                if(this.data[i][j] == 0){
+                    return false;
+                }
+            }
+            
+        }
+        return true;
+    }
+
+    public boolean isAllZero(int i){
+        for (int j = 0; j < this.jumlahKolom; j++){
+            if(this.data[i][j] != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Matrix makeItSquare () {
         Matrix dummyMatrix = new Matrix(this.jumlahBaris, this.jumlahKolom-1);
         int i, j;
@@ -229,27 +254,112 @@ public class Matrix {
         return dummyMatrix;
     }
 
-    public double determinantWithCofExpansion() {
-        int j;
-        double sum = 0;
-
+    public Matrix adjoinMatrix () {
         Matrix dummyMatrix = this.copyMatrix();
-
-        /* Menghitung nilai determinan m */
-        if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
-            return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
-        } else {
-            for (j = 0; j < this.jumlahKolom; j++) {
-                if (j % 2 == 0) {
-                    sum += dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+        int i, j;
+        for (i=0; i<dummyMatrix.getBaris(); i++) {
+            for (j=0; j<dummyMatrix.getKolom(); j++) {
+                if ((i+j)%2 == 0) {
+                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithCofExpansion());
                 } else {
-                    sum -= dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithCofExpansion());
                 }
             }
         }
-        return sum;
+
+        Matrix transposedMatrix = dummyMatrix.copyMatrix();
+        for (i=0; i<dummyMatrix.getBaris(); i++) {
+            for (j=0; j<dummyMatrix.getKolom(); j++) {
+                transposedMatrix.setElmt(i, j, dummyMatrix.getElmt(j, i));
+            }
+        }
+
+        return transposedMatrix;
     }
 
+    // Determinant
+    public double determinantWithCofExpansion() {
+        if (this.isGotDeterminant()) {
+            int j;
+            double sum = 0;
+
+            Matrix dummyMatrix = this.copyMatrix();
+
+            /* Menghitung nilai determinan m */
+            if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
+                return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
+            } else {
+                for (j = 0; j < this.jumlahKolom; j++) {
+                    if (j % 2 == 0) {
+                        sum += dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                    } else {
+                        sum -= dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                    }
+                }
+            }
+            return sum;
+        } else {
+            return Double.NaN;
+        }
+    }
+
+    public double determinantWithReduksiBaris() {
+        if (this.isGotDeterminant()) {
+            Matrix dummyMatrix = new Matrix();
+            dummyMatrix = this.copyMatrix();
+            int baris = dummyMatrix.getBaris();
+            int kolom = dummyMatrix.getKolom();
+
+            
+            int tukar = 0;
+            boolean tidakNol = false;
+            for (int i = 0; i < baris ; i++){
+                tidakNol = false;
+                // untuk cek apakah element i,i == 0
+                while(tidakNol == false && i<kolom){
+                    if(dummyMatrix.getElmt(i, i) == 0){         
+                        for(int j = i+1; j< baris; j++){
+                            if(dummyMatrix.getElmt(j, i) != 0){
+                                dummyMatrix = dummyMatrix.changeRow(i, j);
+                                tukar += 1;
+                                tidakNol = true;
+                                break;
+                            }
+                        } 
+                    }else{
+                        tidakNol = true;
+                    }
+                }
+
+                if (tidakNol == true){
+
+                    for (int j = 1+i; j<this.getBaris(); j++) {
+                        
+                        double rasioPembuatNol = dummyMatrix.getElmt(j, i) / dummyMatrix.getElmt(i, i);
+
+                        for (int l = 0; l<this.getKolom(); l++) {
+                            dummyMatrix.setElmt(j, l, dummyMatrix.getElmt(j, l)-rasioPembuatNol*dummyMatrix.getElmt(i, l));
+                        }
+                        dummyMatrix.printMatriks();
+                        System.out.printf("\n");
+                            
+                        
+                    }
+                }
+            }
+
+            double determinan = Math.pow(-1, tukar);
+            for (int i = 0; i < baris; i++){
+                determinan *= dummyMatrix.getElmt(i, i);
+            }
+            return determinan;
+
+        } else {
+            return Double.NaN;
+        }
+    }
+
+    // Sistem Persamaan Linear
     public void SPLwithCramerMethod () {
         int i;
         Matrix dummyMatrix = new Matrix ();
@@ -361,46 +471,6 @@ public class Matrix {
         return dummyMatrix;
     }
 
-    public Matrix adjoinMatrix () {
-        Matrix dummyMatrix = this.copyMatrix();
-        int i, j;
-        for (i=0; i<dummyMatrix.getBaris(); i++) {
-            for (j=0; j<dummyMatrix.getKolom(); j++) {
-                if ((i+j)%2 == 0) {
-                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithCofExpansion());
-                } else {
-                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithCofExpansion());
-                }
-            }
-        }
-
-        Matrix transposedMatrix = dummyMatrix.copyMatrix();
-        for (i=0; i<dummyMatrix.getBaris(); i++) {
-            for (j=0; j<dummyMatrix.getKolom(); j++) {
-                transposedMatrix.setElmt(i, j, dummyMatrix.getElmt(j, i));
-            }
-        }
-
-        return transposedMatrix;
-    }
-
-    public Matrix inverseWithAdjMethod () {
-        Matrix dummyMatrix = this.copyMatrix();
-        int i, j;
-        if (dummyMatrix.determinantWithCofExpansion() == 0) {
-            System.out.println("This matrix does not have inverse.");
-        } else {
-            double saveDeterminant = dummyMatrix.determinantWithCofExpansion();
-            dummyMatrix = dummyMatrix.adjoinMatrix();
-            for (i=0; i<dummyMatrix.getBaris(); i++) {
-                for (j=0; j<dummyMatrix.getKolom(); j++) {
-                    dummyMatrix.setElmt(i, j, 1/saveDeterminant * dummyMatrix.getElmt(i, j));
-                }
-            }
-        }
-        return dummyMatrix;
-    }
-
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
         Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
@@ -420,62 +490,82 @@ public class Matrix {
         }
     }
 
-     public boolean isNoSolution(int i){
-        for (int j = 0; j < this.jumlahKolom; j++){
-            if(j != this.jumlahKolom -1){
-                if(this.data[i][j] != 0){
-                    return false;
-                }
-            }else{
-                if(this.data[i][j] == 0){
-                    return false;
-                }
-            }
-            
-        }
-        return true;
-    }
 
-    public boolean isAllZero(int i){
-        for (int j = 0; j < this.jumlahKolom; j++){
-            if(this.data[i][j] != 0){
-                return false;
+
+    // INVERSE MATRIX METHOD
+    public Matrix inverseWithIdentity () {
+  
+        Matrix augmentedMatrix = new Matrix(this.getBaris(), this.getKolom()*2);
+        int i, j;
+        // Masukin matrix bersangkutan ke dalam augmentedMatrix
+        for (i = 0; i < this.getBaris(); i++) {
+            for (j = 0; j<this.getKolom(); j++) {
+                augmentedMatrix.setElmt(i, j, this.getElmt(i, j));
             }
         }
-        return true;
+
+        // Masukin matrix identitas ke bagian belakang augmentedMatrix
+        int k, l;
+        k = 0;
+        l = augmentedMatrix.getKolom() / 2;
+        for (i = 0; i < augmentedMatrix.getBaris(); i++) {
+            for (j = augmentedMatrix.getKolom() / 2; j<augmentedMatrix.getKolom(); j++) {
+                if (i == k && j ==l) {
+                    augmentedMatrix.setElmt(i, j, 1);
+                    k+=1;
+                    l+=1;
+                } else {
+                    augmentedMatrix.setElmt(i, j, 0);
+                }
+            }
+        }
+
+        Matrix IAinverse = augmentedMatrix.gaussJordan();
+
+        boolean isIdentity = true;
+        for (i = 0; i < IAinverse.getBaris(); i++) {
+            for (j = 0; j<IAinverse.getKolom()/2; j++) {
+                if (i == j && IAinverse.getElmt(i, j) != 1) {
+                    isIdentity = false;
+                } 
+                if (i !=j && IAinverse.getElmt(i, j) != 0) {
+                    isIdentity = false;
+                }
+            }
+        }
+
+        if (!isIdentity) {
+            return null;
+        } else {
+            Matrix inverseMatrix = this.copyMatrix();
+            k = 0;
+            l = 0;
+            for (i = 0; i < IAinverse.getBaris(); i++) {
+                for (j = IAinverse.getKolom() / 2; j<IAinverse.getKolom(); j++) {
+                    inverseMatrix.setElmt(k, l, IAinverse.getElmt(i, j));
+                    l += 1;
+                }
+                l = 0;
+                k += 1;
+            }
+            return inverseMatrix;
+        }
     }
 
-
-    
-
-    // public void operasiBarisElementer() {
-    //     if (this.isGotDeterminant()) {
-    //         int i, j, l;
-    //         int k;
-
-    //         k=1;
-
-    //         for (i = 0; i<this.getKolom()-1; i++) {
-    //             for (j = 1+i; j<this.getBaris(); j++) {
-    //                 if (this.getElmt(j, i) != 0) {
-    //                     double rasioPembuatNol = this.getElmt(j, i) / this.getElmt(j-k, i);
-
-    //                     for (l = 0; l<this.getKolom(); l++) {
-    //                         this.setElmt(j, l, getElmt(j, l)-rasioPembuatNol*this.getElmt((j-k), l));
-    //                     }
-    //                     this.printMatriks();
-    //                     System.out.printf("\n");
-    //                     k+=1;
-    //                 } else {
-
-    //                 }
-    //             }
-    //             k=1;
-    //             this.printMatriks();
-    //             System.out.printf("\n");
-    //         }
-    //     } else {
-    //         System.out.println("This matrix do not have any determinant.");
-    //     }
-    // }
+    public Matrix inverseWithAdjMethod () {
+        Matrix dummyMatrix = this.copyMatrix();
+        int i, j;
+        if (dummyMatrix.determinantWithCofExpansion() == 0) {
+            return null;
+        } else {
+            double saveDeterminant = dummyMatrix.determinantWithCofExpansion();
+            dummyMatrix = dummyMatrix.adjoinMatrix();
+            for (i=0; i<dummyMatrix.getBaris(); i++) {
+                for (j=0; j<dummyMatrix.getKolom(); j++) {
+                    dummyMatrix.setElmt(i, j, 1/saveDeterminant * dummyMatrix.getElmt(i, j));
+                }
+            }
+        }
+        return dummyMatrix;
+    }
 }
