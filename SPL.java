@@ -23,13 +23,16 @@ public class SPL {
                 boolean first = true;
                 for (int j = 0; j < ans[i].length ; j++){
                     if(ans[i][j] != null ){
-                        if(j != ans[i].length -1 && ans[i][j] != 0D){
-                            if(!first){
-                                str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
-                            }else{
-                                str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
-                                first = false;
-                            }                            
+                        if(j != ans[i].length -1 ){
+                            if( ans[i][j] != 0D){
+                                
+                                if(!first){
+                                    str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                }else{
+                                    str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    first = false;
+                                } 
+                            }                           
                         }else{
                             if(!first){
                                 if(ans[i][j] != 0D){
@@ -52,14 +55,13 @@ public class SPL {
         }
         return strReal.toString();
     }
-    public static void GaussMethod(Matrix mMasuk){
+
+    public static void OperationMatrix(Matrix mMasuk){
         Double[][] solution = new Double[mMasuk.getKolom()-1][mMasuk.getKolom()]; // Variable untuk nampung solution
-        mMasuk = OBE.gauss(mMasuk); // Membuat Matrix jadi eselon 
         int idx = 0,z = 0;
         boolean noSolution = false;
-        System.out.println("\nThis is the the OBE result: ");
-        mMasuk.printMatriks();
-        System.out.println("\n");
+        
+        
         while(z < mMasuk.getBaris()){
             if(mMasuk.isNoSolution(z)){
                 noSolution = true;
@@ -133,6 +135,30 @@ public class SPL {
             System.out.println(outputSolution(solution));
 
         }
+    }
+
+
+    public static void GaussMethod(Matrix mMasuk){
         
+        mMasuk = OBE.gauss(mMasuk); // Membuat Matrix jadi eselon 
+        System.out.println("\nThis is the the OBE result: ");
+        mMasuk.printMatriks();
+        System.out.println("\n");
+
+        
+        
+        OperationMatrix(mMasuk);
+        
+    }
+
+
+    public static void GaussJordanMethod (Matrix mMasuk){
+
+        mMasuk = OBE.gaussJordan(mMasuk);
+        System.out.println("\nThis is the the OBE result: ");
+        mMasuk.printMatriks();
+        System.out.println("\n");
+
+        OperationMatrix(mMasuk);
     }
 }
