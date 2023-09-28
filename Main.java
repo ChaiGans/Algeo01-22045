@@ -116,6 +116,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         System.out.printf("\n");
     }
 
+
     public static void SHOW_INVERSE_SUBMENU () {
         System.out.println("==================================================");
         System.out.println("Finding the inverse of the matrix.");
@@ -352,6 +353,12 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 5) { // Multiple Linear Regression
                 // Handle choice 5
+                CLEAR_TERMINAL();
+                SHOW_GREETINGS_TO_USER();
+                System.out.println("Welcome to Multiple Linear Regression !");
+                System.out.println("==================================================");
+                Matrix.MultipleLinearRegression(scanner);
+                reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
                 // Handle choice 6
             } else if (mainMenuChoice == 7) { // Terminate the program
