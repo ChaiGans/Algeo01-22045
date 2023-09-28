@@ -214,23 +214,10 @@ public class Matrix {
     }
 
     public boolean isGotDeterminant() {
-        int i, j, countRow, countCol;
-        for (i=0; i<this.getBaris(); i++) {
-            countRow = 0;
-            countCol = 0;
-            for (j=0; j<this.getKolom(); j++) {
-                if (this.getElmt(i, j)  == 0) {
-                    countRow += 1;
-                }
-                if (this.getElmt(j, i) == 0) {
-                    countCol += 1;
-                }
-            }
-            if (countRow == this.getKolom() || countCol == this.getBaris()) {
-                return false;
-            }
+        if (this.getBaris() == this.getKolom()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public Matrix subMatrix(int a, int b) {    
