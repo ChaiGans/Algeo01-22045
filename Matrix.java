@@ -593,11 +593,11 @@ public class Matrix {
                 xy = inputTitik.split(" ");
                 if (xy.length != 2) {
                     System.out.println("Invalid input. The input format is X Y. Please do re-input.");
-                    System.out.println("");
+                    System.out.printf("\n");
                 }
             } while (xy.length != 2);
-            int x = Integer.parseInt(xy[0]);
-            int y = Integer.parseInt(xy[1]);
+            double x = Double.parseDouble(xy[0]);
+            double y = Double.parseDouble(xy[1]);
             for (j = 0; j<derajatPolinomial + 2; j++) {
                 if (j == derajatPolinomial + 1) {
                     dummyMatrix.setElmt(i, j, y);
@@ -606,10 +606,45 @@ public class Matrix {
                 }
             }
         }
-        
-        int xTaksir = scanner.nextInt();
-        scanner.nextLine();
-        dummyMatrix.printMatriks();
+        System.out.print("Nilai x yang hendak ditaksir: ");
+        double xTaksir = scanner.nextDouble();
+        scanner.nextLine(); // dummyMatrix=3x4 solution=2x3
+        Double solution[][] = dummyMatrix.gauss().solutionOfGaussMethod();
+        if (solution != null) {
+            System.out.print("f(x) = ");
+            for (i = 0; i < dummyMatrix.getBaris(); i++) { // solution 4x5 ketika polinomial = 3
+                if (i==0){
+                    System.out.print(solution[i][solution[i].length-1] + " + ");
+                } else if (i == solution.length-1) {
+                    System.out.print(solution[i][solution[i].length-1] + "x^" + i);
+                } else {
+                    System.out.print(solution[i][solution[i].length-1] + "x^" + i + " + ");
+                }        
+            }
+            System.out.printf("\n");
+            System.out.print("f("+xTaksir+") = ");
+            for (i = 0; i < solution.length; i++) {
+                if (i==0){
+                    System.out.print(solution[i][solution[i].length-1] + " + ");
+                } else if (i == solution.length-1) {
+                    System.out.print(solution[i][solution[i].length-1] + "("+ xTaksir+")" + "^" + i);
+                } else {
+                    System.out.print(solution[i][solution[i].length-1] + "("+ xTaksir+")" + "^" + i + " + ");
+                }        
+            }
+            double result;
+            result = 0;
+            for (i=0; i<solution.length; i++) {
+                result += solution[i][solution[i].length-1]*Math.pow(xTaksir, i);
+            }
+            System.out.printf("\n");
+            System.out.print("Hasil taksiran adalah : ");
+            System.out.printf("%f", result);
+
+        } else {
+            System.out.println("The coordinate given do not produce any possible interpolation.");
+        }
+
     }
 
     public boolean isAllNull(Double[] row){
@@ -749,7 +784,88 @@ public class Matrix {
         }
     }
 
-    public  void GaussMethod(){
+    public Double[][] solutionOfGaussMethod(){ // Input is already on Gauss Format
+        Double[][] solution = new Double[this.getKolom()-1][this.getKolom()]; // Variable untuk nampung solution
+        int idx = 0,z = 0;
+        boolean noSolution = false;
+        
+        
+        while(z < this.getBaris()){
+            if(this.isNoSolution(z)){
+                noSolution = true;
+                break;
+            }else{
+                z += 1;
+            }
+        }
+        if(noSolution){
+            return null;
+        }else{
+            for (int i = this.getBaris() - 1; i >=0 ; i--){
+                // Find index leading 1
+                if(this.isAllZero(i)){
+                    continue;
+                }else{
+                    idx = 0;
+                    while( idx < this.getKolom()){
+                        if(this.getElmt(i, idx) == 1){
+                            break;
+                        }else{
+                            idx += 1;
+                        }
+                    }
+
+                    
+                    int k = idx + 1;
+                    while(k <= this.getKolom()-1){
+                        if(k == this.getKolom()-1){
+                            solution[idx][k] = this.getElmt(i, k);
+                        }else{
+                            if(this.getElmt(i, k) !=0){
+                                solution[idx][k] = -(this.getElmt(i, k));
+                            }else{
+                                solution[idx][k] = (this.getElmt(i, k));
+                            }
+                            
+                        }
+                        k += 1;
+                    
+                    }
+                
+                }
+            }
+            
+            for (int x = this.getKolom()-2; x >= 0; x--){
+                if(isAllNull(solution[x])){
+                    continue;
+                }else{
+                    for (int b = 0; b < this.getKolom(); b++){
+                        if(solution[x][b] != null){
+                            if(b != this.getKolom()-1){
+                                if(isAllNull(solution[b]) == false){
+                                    
+                                    for(int l = b +1; l < this.getKolom(); l++){
+                                        if(solution[b][l] != null){
+                                            solution[x][l] += (solution[x][b] * solution[b][l]);
+                                            
+                                        }            
+                                    }
+                                    solution[x][b]= null;
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
+
+            return solution;
+
+        }
+    }
+
+    public void GaussMethod(){
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gauss(); // Membuat Matrix jadi eselon 
         System.out.println("\nThis is the the OBE result: ");
@@ -762,7 +878,7 @@ public class Matrix {
         
     }
 
-    public  void GaussJordanMethod (){
+    public void GaussJordanMethod (){
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gaussJordan();
         System.out.println("\nThis is the the OBE result: ");
