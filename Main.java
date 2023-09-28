@@ -285,6 +285,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
+                            System.out.println(currentMatrix.determinantWithReduksiBaris());
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -293,7 +294,8 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                         if (currentMatrix.determinantWithCofExpansion() == Double.NaN) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
-                            System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
+                            System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
+                            System.out.println(currentMatrix.determinantWithCofExpansion());
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -319,6 +321,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                             System.out.println("Your matrix input does not have inverse.");
                         } else {
                             System.out.println("The result of matrix inverse using Adjoint Matrix Method is :");
+                            currentMatrix.printMatriks();
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -329,6 +332,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                             System.out.println("Your matrix input does not have inverse.");
                         } else {
                             System.out.println("The result of matrix inverse using Elementary Row Transformation Method is :");
+                            currentMatrix.printMatriks();
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -340,6 +344,11 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 // Handle choice 3
             } else if (mainMenuChoice == 4) { // Polinomial Interpolation
                 // Handle choice 4
+                CLEAR_TERMINAL();
+                SHOW_GREETINGS_TO_USER();
+                System.out.println("Welcome to polinomial interpolation !");
+                System.out.println("==================================================");
+                Matrix.polinomialInterpolation(scanner);
             } else if (mainMenuChoice == 5) { // Multiple Linear Regression
                 // Handle choice 5
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
