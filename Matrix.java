@@ -576,4 +576,39 @@ public class Matrix {
         }
         return dummyMatrix;
     }
+    
+    // Polinomial Interpolation
+    public static void polinomialInterpolation (Scanner scanner) {
+        System.out.print("Input the degree of the polinomial: ");
+        int derajatPolinomial = scanner.nextInt();
+        scanner.nextLine();
+        int i, j;
+        String[] xy;
+        Matrix dummyMatrix = new Matrix(derajatPolinomial+1, derajatPolinomial+2);
+        for (i = 0; i < derajatPolinomial + 1; i++) {
+            // Mengelola input agar tersimpan pada nilai x dan y
+            do {
+                System.out.print("Input the coordinate (x"+i+",y"+i+") : ");
+                String inputTitik = scanner.nextLine();
+                xy = inputTitik.split(" ");
+                if (xy.length != 2) {
+                    System.out.println("Invalid input. The input format is X Y. Please do re-input.");
+                    System.out.println("");
+                }
+            } while (xy.length != 2);
+            int x = Integer.parseInt(xy[0]);
+            int y = Integer.parseInt(xy[1]);
+            for (j = 0; j<derajatPolinomial + 2; j++) {
+                if (j == derajatPolinomial + 1) {
+                    dummyMatrix.setElmt(i, j, y);
+                } else {
+                    dummyMatrix.setElmt(i, j, Math.pow(x,j));
+                }
+            }
+        }
+        
+        int xTaksir = scanner.nextInt();
+        scanner.nextLine();
+        dummyMatrix.printMatriks();
+    }
 }
