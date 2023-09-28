@@ -576,4 +576,164 @@ public class Matrix {
         }
         return dummyMatrix;
     }
+
+    public boolean isAllNull(Double[] row){
+        for (int i = 0; i < row.length ; i++ ){
+            if(row[i] != null){
+                return false;
+            }            
+        }
+        return true;
+    }
+
+    public  String outputSolution(Double[][] ans){
+        StringBuffer[] str = new StringBuffer[ans.length];
+        String[] strSol = new String[ans[0].length];
+        StringBuffer strReal = new StringBuffer();
+        for(int i = ans.length -1; i >= 0; i--){
+            str[i] = new StringBuffer();
+            if(isAllNull(ans[i])){
+                str[i].append("x" + (i + 1) + " = " + (char)(i+97) + "\n");
+                strSol[i] = Character.toString( (char)(i+97));
+            }else{
+                str[i].append("x" + (i + 1) + " = ");
+                boolean first = true;
+                for (int j = 0; j < ans[i].length ; j++){
+                    if(ans[i][j] != null ){
+                        if(j != ans[i].length -1 ){
+                            if( ans[i][j] != 0D){
+                                
+                                if(!first){
+                                    str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                }else{
+                                    str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    first = false;
+                                } 
+                            }                           
+                        }else{
+                            if(!first){
+                                if(ans[i][j] != 0D){
+                                    str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                }
+                                 
+                            }else{
+                                str[i].append( String.format("%.2f",ans[i][j])); 
+                                first = false;
+                            }                                
+                        }   
+                    }   
+                }
+                str[i].append("\n");
+            }
+        }
+
+        for (int k = 0; k <ans.length ; k++){
+            strReal.append(str[k].toString());
+        }
+        return strReal.toString();
+    }
+
+    public void OperationMatrix(){
+        Double[][] solution = new Double[this.getKolom()-1][this.getKolom()]; // Variable untuk nampung solution
+        int idx = 0,z = 0;
+        boolean noSolution = false;
+        
+        
+        while(z < this.getBaris()){
+            if(this.isNoSolution(z)){
+                noSolution = true;
+                break;
+            }else{
+                z += 1;
+            }
+        }
+        if(noSolution){
+            System.out.println("There are no solution.");
+        }else{
+            for (int i = this.getBaris() - 1; i >=0 ; i--){
+                // Find index leading 1
+                if(this.isAllZero(i)){
+                    continue;
+                }else{
+                    idx = 0;
+                    while( idx < this.getKolom()){
+                        if(this.getElmt(i, idx) == 1){
+                            break;
+                        }else{
+                            idx += 1;
+                        }
+                    }
+
+                    
+                    int k = idx + 1;
+                    while(k <= this.getKolom()-1){
+                        if(k == this.getKolom()-1){
+                            solution[idx][k] = this.getElmt(i, k);
+                        }else{
+                            if(this.getElmt(i, k) !=0){
+                                solution[idx][k] = -(this.getElmt(i, k));
+                            }else{
+                                solution[idx][k] = (this.getElmt(i, k));
+                            }
+                            
+                        }
+                        k += 1;
+                    
+                    }
+                
+                }
+            }
+            
+            for (int x = this.getKolom()-2; x >= 0; x--){
+                if(isAllNull(solution[x])){
+                    continue;
+                }else{
+                    for (int b = 0; b < this.getKolom(); b++){
+                        if(solution[x][b] != null){
+                            if(b != this.getKolom()-1){
+                                if(isAllNull(solution[b]) == false){
+                                    
+                                    for(int l = b +1; l < this.getKolom(); l++){
+                                        if(solution[b][l] != null){
+                                            solution[x][l] += (solution[x][b] * solution[b][l]);
+                                            
+                                        }            
+                                    }
+                                    solution[x][b]= null;
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
+
+            System.out.println(outputSolution(solution));
+
+        }
+    }
+
+    public  void GaussMethod(){
+        Matrix dummyMatrix = new Matrix();
+        dummyMatrix = this.gauss(); // Membuat Matrix jadi eselon 
+        System.out.println("\nThis is the the OBE result: ");
+        this.printMatriks();
+        System.out.println("\n");
+
+        
+        
+        dummyMatrix.OperationMatrix();
+        
+    }
+
+    public  void GaussJordanMethod (){
+        Matrix dummyMatrix = new Matrix();
+        dummyMatrix = this.gaussJordan();
+        System.out.println("\nThis is the the OBE result: ");
+        this.printMatriks();
+        System.out.println("\n");
+
+        dummyMatrix.OperationMatrix();
+    }
 }

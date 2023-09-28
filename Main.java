@@ -239,14 +239,14 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                         if (linearEqSubMenuChoice == 1) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                             System.out.println("The result of Gauss method for the system of linear equation is the following :");
-                            SPL.GaussMethod(currentMatrix);
+                            currentMatrix.GaussMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
                             
                         } else if (linearEqSubMenuChoice == 2) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
                             System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
-                            SPL.GaussJordanMethod(currentMatrix);
+                            currentMatrix.GaussJordanMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
