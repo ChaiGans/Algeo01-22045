@@ -349,6 +349,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 System.out.println("Welcome to polinomial interpolation !");
                 System.out.println("==================================================");
                 Matrix.polinomialInterpolation(scanner);
+                reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 5) { // Multiple Linear Regression
                 // Handle choice 5
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
