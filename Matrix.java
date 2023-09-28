@@ -326,6 +326,10 @@ public class Matrix {
                                 break;
                             }
                         } 
+                        
+                       if(i == kolom -1){
+                         break;
+                       }
                     }else{
                         tidakNol = true;
                     }
@@ -347,11 +351,15 @@ public class Matrix {
                     }
                 }
             }
-
+            
             double determinan = Math.pow(-1, tukar);
             for (int i = 0; i < baris; i++){
                 determinan *= dummyMatrix.getElmt(i, i);
             }
+            if(determinan == -0D){
+                determinan = 0;
+            }
+            
             return determinan;
 
         } else {
