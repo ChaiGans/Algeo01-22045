@@ -287,16 +287,21 @@ public class Matrix {
 
             /* Menghitung nilai determinan m */
             if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
+                System.out.println("h1");
                 return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
+                
+                
             } else {
                 for (j = 0; j < this.jumlahKolom; j++) {
                     if (j % 2 == 0) {
                         sum += dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
+                        
                     } else {
                         sum -= dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
                     }
                 }
             }
+            
             return sum;
         } else {
             return Double.NaN;
@@ -886,5 +891,141 @@ public class Matrix {
         System.out.println("\n");
 
         dummyMatrix.OperationMatrix();
+    }
+
+
+    public static void MultipleLinearRegression(Scanner scanner){
+        System.out.println("How do you want to input your matrix?");
+        System.out.println("1. By inputting manually via program.");
+        System.out.println("2. By reading .txt file");
+        System.out.println();
+
+        int choice;
+        Matrix inputMatrix = null;
+        int variabel;
+        int sampel;
+        do{
+            System.out.print("Masukkan Pilihan: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if(choice == 1){
+                System.out.print("Input how many variable: ");
+                
+                variabel = scanner.nextInt();
+                scanner.nextLine();
+                System.out.print("Input how many sample: ");
+                
+                sampel = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Insert sample with format : x1 x2 ... y");
+                inputMatrix = new Matrix(sampel, variabel+1);
+                for (int i = 0; i < inputMatrix.jumlahBaris; i++) {
+                    System.out.print("Sample " + (i + 1) + " : ");
+                    String[] inputValues = scanner.nextLine().split(" ");
+                    for (int j = 0; j < inputMatrix.jumlahKolom; j++) {
+                        inputMatrix.data[i][j] = Double.parseDouble(inputValues[j]);
+                    }
+                }
+            }else if(choice == 2){
+                System.out.print("Input the filename and don't forget to include .txt : ");
+                String filename;
+                do {
+                    filename = scanner.nextLine();
+                    if (!filename.endsWith(".txt")) {
+                        System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                    }
+                } while (!filename.endsWith(".txt"));
+
+                inputMatrix = new Matrix();
+                inputMatrix.bacaMatriksDariFile(filename);
+            }
+        }while(choice != 1 && choice !=  2);
+        
+        Matrix dummyMatrix = new Matrix(inputMatrix.jumlahBaris,inputMatrix.jumlahKolom+1);
+
+        for (int i = 0 ; i < dummyMatrix.getBaris(); i++){
+            for (int j = 0; j < dummyMatrix.getKolom(); j++){
+                if(j == 0){
+                    dummyMatrix.setElmt(i, j, 1);
+                }else{
+                    dummyMatrix.setElmt(i, j, inputMatrix.getElmt(i, j-1));
+                }
+            }
+        }
+        double temp;
+        Matrix matrixRegresi = new Matrix(dummyMatrix.getKolom()-1,dummyMatrix.getKolom());
+        for (int i=0;i<matrixRegresi.getBaris();i++){
+            for(int j=0;j<matrixRegresi.getKolom();j++){
+                temp = 0;
+                for(int k=0;k<dummyMatrix.getBaris();k++){
+                    temp += dummyMatrix.getElmt(k, i) * dummyMatrix.getElmt(k, j);
+                }
+                matrixRegresi.setElmt(i, j, temp);
+            }
+        }
+        System.out.println();
+        System.out.println("Normal Estimation Equation for Multiple Linear Regression :");
+        for (int i = 0; i < matrixRegresi.jumlahBaris; i++){
+            for (int j = 0; j < matrixRegresi.jumlahKolom; j++){
+                if(j != matrixRegresi.jumlahKolom-1){
+                    System.out.format("%.2fb%d",matrixRegresi.getElmt(i, j),j);
+                }else{
+                    System.out.format("%.2f\n",matrixRegresi.getElmt(i, j));
+                }
+
+                if(j == matrixRegresi.jumlahKolom-2){
+                    System.out.print(" = ");
+                }else if(j < matrixRegresi.jumlahKolom-2){
+                    System.out.print(" + ");
+                }
+            }
+
+        }
+        System.out.println();
+        System.out.println("This is the augmented matrix of this linear regression \n");
+        matrixRegresi.printMatriks();
+        System.out.println();
+
+        System.out.println("This is the result of gauss method for the augmented matrix above : ");
+        matrixRegresi.gauss().printMatriks();
+        System.out.println();
+        Double[][] tempSolution = matrixRegresi.gauss().solutionOfGaussMethod();
+        System.out.print("The linear regression equation : y = ");
+        for (int i = 0; i < tempSolution.length; i++){
+            for (int j = 0; j < tempSolution[i].length; j++){
+                if(j == tempSolution[i].length -1){
+                    if(i == 0){
+                        System.out.format("%.2f + ",tempSolution[i][j]);
+                    }else if(i==tempSolution.length-1){
+                        System.out.format("%.2fx%d  ",tempSolution[i][j],i);
+                    }else{
+                        System.out.format("%.2fx%d + ",tempSolution[i][j],i);
+                    } 
+                }
+            }
+        }
+        System.out.println();
+        matrixRegresi.GaussMethod();
+        Double[] predict = new Double[dummyMatrix.getKolom()-2];
+        System.out.println("Please input variable value that want to be predicted: ");
+        for(int i = 0; i < predict.length; i++){
+            System.out.print("x" + (i+1) + " = ");
+            Double input = scanner.nextDouble();
+            predict[i] = input;
+        }
+        
+        Double tempDouble = 0D;
+        for(int i = 0; i < tempSolution.length; i++){
+            if (tempSolution[i][tempSolution[i].length - 1] != null) {
+                if(i == 0){
+                    tempDouble += tempSolution[i][tempSolution[i].length-1];
+                }else{
+                    tempDouble += (tempSolution[i][tempSolution[i].length-1] * predict[i-1]);
+                }
+            }
+        }
+        System.out.println("The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
+        
     }
 }
