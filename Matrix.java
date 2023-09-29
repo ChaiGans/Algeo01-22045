@@ -468,21 +468,27 @@ public class Matrix {
 
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
-        Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
-        A.printMatriks();
-        Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
+        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            System.out.println("SPL ini tidak memiliki bisa diselesaikan dengan matriks balikan karena determinan matriks tersebut sama dengan nol sehingga tidak memiliki invers.");
+        } else {
+            Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+            A.printMatriks();
+            Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
-        for (int i = 0; i < dummyMatrix.getBaris(); i++) {
-            B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+            for (int i = 0; i < dummyMatrix.getBaris(); i++) {
+                B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+            }
+            B.printMatriks();
+
+            Matrix solution = multiplyMatrix(A, B);
+            solution.printMatriks();
+
+            for (int i = 0; i < solution.getBaris(); i++) {
+                System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+            }
+
         }
-        B.printMatriks();
-
-        Matrix solution = multiplyMatrix(A, B);
-        solution.printMatriks();
-
-        for (int i = 0; i < solution.getBaris(); i++) {
-            System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
-        }
+        
     }
 
 
