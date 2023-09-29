@@ -795,7 +795,12 @@ public class Matrix {
                             if( ans[i][j] != 0D){
                                 
                                 if(!first){
-                                    str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    if(ans[i][j] > 0){
+                                        str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    }else{
+                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j]) )+ strSol[j] );
+                                    }
+                                    
                                 }else{
                                     str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
                                     first = false;
@@ -804,7 +809,12 @@ public class Matrix {
                         }else{
                             if(!first){
                                 if(ans[i][j] != 0D){
-                                    str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                    if(ans[i][j] > 0){
+                                        str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                    }else{
+                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j])));
+                                    }
+                                    
                                 }
                                  
                             }else{
