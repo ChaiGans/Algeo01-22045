@@ -293,7 +293,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                         } else if (linearEqSubMenuChoice == 4) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                            System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
+                            System.out.println("The result of Cramer method for the system of linear equation is the following :");
                             currentMatrix.SPLwithCramerMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);

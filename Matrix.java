@@ -359,13 +359,18 @@ public class Matrix {
         int i;
         Matrix dummyMatrix = new Matrix ();
         dummyMatrix = this.copyMatrix();
-        double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-        for (i = 0; i < this.getKolom()-1; i++) {
-            dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
-            double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-            System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
-            dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+        } else {
+            double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+            for (i = 0; i < this.getKolom()-1; i++) {
+                dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+                double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+                System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
+                dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+            }
         }
+
     }
 
     public Matrix gauss(){
@@ -469,7 +474,7 @@ public class Matrix {
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
         if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
-            System.out.println("SPL ini tidak memiliki bisa diselesaikan dengan matriks balikan karena determinan matriks tersebut sama dengan nol sehingga tidak memiliki invers.");
+            System.out.println("This SPL does not have any solution because matrix do not have any inverse because determinant of the matrix is zero.");
         } else {
             Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
             A.printMatriks();
@@ -973,7 +978,7 @@ public class Matrix {
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gauss(); // Membuat Matrix jadi eselon 
         System.out.println("\nThis is the the OBE result: ");
-        this.printMatriks();
+        dummyMatrix.printMatriks();
         System.out.println("\n");
 
         
