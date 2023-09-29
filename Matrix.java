@@ -358,17 +358,22 @@ public class Matrix {
     public void SPLwithCramerMethod () {
         int i;
         Matrix dummyMatrix = this.copyMatrix();
-        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
-            System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
+            System.out.println("This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
         } else {
-            double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-            for (i = 0; i < this.getKolom()-1; i++) {
-                dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
-                double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-                System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
-                dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+            } else {
+                double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+                for (i = 0; i < this.getKolom()-1; i++) {
+                    dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+                    double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+                    System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
+                    dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+                }
             }
         }
+       
 
     }
 
@@ -472,27 +477,26 @@ public class Matrix {
 
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
-        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
-            System.out.println("This SPL does not have any solution because matrix do not have any inverse because determinant of the matrix is zero.");
+        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
+            System.out.println("This SPL could not be solved using this method because it is not a square matrix which its determinant is not defined");
         } else {
-            Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
-            A.printMatriks();
-            Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
+            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+                System.out.println("This SPL does not have any solution because matrix do not have any inverse because determinant of the matrix is zero.");
+            } else {
+                Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+                Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
-            for (int i = 0; i < dummyMatrix.getBaris(); i++) {
-                B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+                for (int i = 0; i < dummyMatrix.getBaris(); i++) {
+                    B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+                }
+
+                Matrix solution = multiplyMatrix(A, B);
+
+                for (int i = 0; i < solution.getBaris(); i++) {
+                    System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+                }
             }
-            B.printMatriks();
-
-            Matrix solution = multiplyMatrix(A, B);
-            solution.printMatriks();
-
-            for (int i = 0; i < solution.getBaris(); i++) {
-                System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
-            }
-
-        }
-        
+        } 
     }
 
 
