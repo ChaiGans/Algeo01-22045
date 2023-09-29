@@ -247,9 +247,9 @@ public class Matrix {
         for (i=0; i<dummyMatrix.getBaris(); i++) {
             for (j=0; j<dummyMatrix.getKolom(); j++) {
                 if ((i+j)%2 == 0) {
-                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithCofExpansion());
+                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithReduksiBaris());
                 } else {
-                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithCofExpansion());
+                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithReduksiBaris());
                 }
             }
         }
@@ -274,7 +274,6 @@ public class Matrix {
 
             /* Menghitung nilai determinan m */
             if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
-                System.out.println("h1");
                 return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
                 
                 
@@ -364,10 +363,10 @@ public class Matrix {
         int i;
         Matrix dummyMatrix = new Matrix ();
         dummyMatrix = this.copyMatrix();
-        double save = dummyMatrix.makeItSquare().determinantWithCofExpansion();
+        double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
         for (i = 0; i < this.getKolom()-1; i++) {
             dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
-            double determinantX = dummyMatrix.makeItSquare().determinantWithCofExpansion();
+            double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
             System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
             dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
         }
@@ -555,10 +554,10 @@ public class Matrix {
     public Matrix inverseWithAdjMethod () {
         Matrix dummyMatrix = this.copyMatrix();
         int i, j;
-        if (dummyMatrix.determinantWithCofExpansion() == 0) {
+        if (dummyMatrix.determinantWithReduksiBaris() == 0) {
             return null;
         } else {
-            double saveDeterminant = dummyMatrix.determinantWithCofExpansion();
+            double saveDeterminant = dummyMatrix.determinantWithReduksiBaris();
             dummyMatrix = dummyMatrix.adjoinMatrix();
             for (i=0; i<dummyMatrix.getBaris(); i++) {
                 for (j=0; j<dummyMatrix.getKolom(); j++) {
