@@ -30,14 +30,23 @@ public class Matrix {
     }
 
     public void bacaMatriks(Scanner scanner) {
-        // Perulangan (Looping) untuk meminta dan mengisi isian matriks
-        for (int i = 0; i < this.jumlahBaris; i++) {
-            String[] inputValues = scanner.nextLine().split(" ");
-            for (int j = 0; j < this.jumlahKolom; j++) {
-                this.data[i][j] = Double.parseDouble(inputValues[j]);
+        boolean inputValid = false;
+        
+        while (!inputValid) {
+            try {
+                for (int i = 0; i < this.jumlahBaris; i++) {
+                    String[] inputValues = scanner.nextLine().split(" ");
+                    for (int j = 0; j < this.jumlahKolom; j++) {
+                        this.data[i][j] = Double.parseDouble(inputValues[j]);
+                    }
+                }
+                inputValid = true; // Set inputValid to true if no exception is thrown
+            } catch (NumberFormatException nfe) {
+                System.out.println("Your input is not valid.");
+                System.out.println("Re-input matrix from the start.");
             }
         }
-    }
+    }    
 
     public void bacaMatriksDariFile(String filename) {
         // Inisialisasi variabel dummyMatrix
