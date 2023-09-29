@@ -357,8 +357,7 @@ public class Matrix {
     // Sistem Persamaan Linear
     public void SPLwithCramerMethod () {
         int i;
-        Matrix dummyMatrix = new Matrix ();
-        dummyMatrix = this.copyMatrix();
+        Matrix dummyMatrix = this.copyMatrix();
         if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
             System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
         } else {
@@ -1110,7 +1109,6 @@ public class Matrix {
             }
         }
         System.out.println();
-        matrixRegresi.GaussMethod();
         Double[] predict = new Double[dummyMatrix.getKolom()-2];
         System.out.println("Please input variable value that want to be predicted: ");
         for(int i = 0; i < predict.length; i++){
