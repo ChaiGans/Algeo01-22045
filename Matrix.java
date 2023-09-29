@@ -606,7 +606,15 @@ public class Matrix {
         scanner.nextLine(); // dummyMatrix=3x4 solution=2x3
         Double solution[][] = dummyMatrix.gauss().solutionOfGaussMethod();
 
-        if (solution == null) {
+        boolean system = true;
+        for (i=1; i<dummyMatrix.getBaris(); i++) {
+            if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
+                system = false;
+                break;
+            }
+        }
+
+        if (solution == null || system == false) {
             System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
         } else if (solution != null) {
             for (i = 0; i < solution.length; i++) {
@@ -614,6 +622,7 @@ public class Matrix {
                     solution[i][solution[i].length - 1] = 0.0; 
                 }
             }
+            
             System.out.print("f(x) = ");
             boolean firstTerm = true; // Add this flag to track the first term
             for (i = 0; i < dummyMatrix.getBaris(); i++) {
@@ -711,8 +720,16 @@ public class Matrix {
                     sc.close();
 
                     Double solution[][] = dummyMatrix.gauss().solutionOfGaussMethod();
+                    
+                    boolean system = true;
+                    for (i=1; i<dummyMatrix.getBaris(); i++) {
+                        if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
+                            system = false;
+                            break;
+                        }
+                    }
 
-                    if (solution == null) {
+                    if (solution == null || system == false) {
                         System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
                     } else if (solution != null) {
                         for (i = 0; i < solution.length; i++) {
