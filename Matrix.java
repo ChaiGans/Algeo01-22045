@@ -334,11 +334,7 @@ public class Matrix {
 
                         for (int l = 0; l<this.getKolom(); l++) {
                             dummyMatrix.setElmt(j, l, dummyMatrix.getElmt(j, l)-rasioPembuatNol*dummyMatrix.getElmt(i, l));
-                        }
-                        dummyMatrix.printMatriks();
-                        System.out.printf("\n");
-                            
-                        
+                        }                        
                     }
                 }
             }
