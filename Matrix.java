@@ -3,9 +3,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Matrix {
-    private double[][] data; // The matrix data
-    private int jumlahBaris; // Number of rows
-    private int jumlahKolom; // Number of columns
+    double[][] data; // The matrix data
+    int jumlahBaris; // Number of rows
+    int jumlahKolom; // Number of columns
 
     public Matrix(int rows, int columns) {
         this.jumlahBaris = rows;
