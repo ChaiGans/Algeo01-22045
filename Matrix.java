@@ -82,8 +82,8 @@ public class Matrix {
 
         // catch bertujuan untuk menampilkan error kepada user
         } catch (FileNotFoundException e) {
-            System.out.println("File "+filename+" not found in this directory.");
-            System.out.println("Program will shut down. Please re-run the program");
+            System.out.println("\n");
+            System.out.println("Whoosh! File "+filename+" not found in this directory.");
         }
     }
 
@@ -247,9 +247,9 @@ public class Matrix {
         for (i=0; i<dummyMatrix.getBaris(); i++) {
             for (j=0; j<dummyMatrix.getKolom(); j++) {
                 if ((i+j)%2 == 0) {
-                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithCofExpansion());
+                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithReduksiBaris());
                 } else {
-                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithCofExpansion());
+                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithReduksiBaris());
                 }
             }
         }
@@ -274,7 +274,6 @@ public class Matrix {
 
             /* Menghitung nilai determinan m */
             if (this.jumlahBaris == 2 && this.jumlahKolom == 2) {
-                System.out.println("h1");
                 return dummyMatrix.data[0][0] * dummyMatrix.data[1][1] - dummyMatrix.data[1][0] * dummyMatrix.data[0][1];
                 
                 
@@ -335,11 +334,7 @@ public class Matrix {
 
                         for (int l = 0; l<this.getKolom(); l++) {
                             dummyMatrix.setElmt(j, l, dummyMatrix.getElmt(j, l)-rasioPembuatNol*dummyMatrix.getElmt(i, l));
-                        }
-                        dummyMatrix.printMatriks();
-                        System.out.printf("\n");
-                            
-                        
+                        }                        
                     }
                 }
             }
@@ -364,10 +359,10 @@ public class Matrix {
         int i;
         Matrix dummyMatrix = new Matrix ();
         dummyMatrix = this.copyMatrix();
-        double save = dummyMatrix.makeItSquare().determinantWithCofExpansion();
+        double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
         for (i = 0; i < this.getKolom()-1; i++) {
             dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
-            double determinantX = dummyMatrix.makeItSquare().determinantWithCofExpansion();
+            double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
             System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
             dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
         }
@@ -555,10 +550,10 @@ public class Matrix {
     public Matrix inverseWithAdjMethod () {
         Matrix dummyMatrix = this.copyMatrix();
         int i, j;
-        if (dummyMatrix.determinantWithCofExpansion() == 0) {
+        if (dummyMatrix.determinantWithReduksiBaris() == 0) {
             return null;
         } else {
-            double saveDeterminant = dummyMatrix.determinantWithCofExpansion();
+            double saveDeterminant = dummyMatrix.determinantWithReduksiBaris();
             dummyMatrix = dummyMatrix.adjoinMatrix();
             for (i=0; i<dummyMatrix.getBaris(); i++) {
                 for (j=0; j<dummyMatrix.getKolom(); j++) {
@@ -571,13 +566,21 @@ public class Matrix {
     
     // Polinomial Interpolation
     public static void polinomialInterpolation (Scanner scanner) {
-        System.out.print("Input the degree of the polinomial: ");
-        int derajatPolinomial = scanner.nextInt();
+        System.out.print("Input how many coordinates you would like to input: ");
+        int banyakTitik = 0;
+        banyakTitik = scanner.nextInt();
         scanner.nextLine();
+        while (banyakTitik <= 1) {
+            System.out.println("Your input is not valid. To do polinomial interpolation, you at least need to input two coordinates.");
+            System.out.print("Input how many coordinates you would like to input: ");
+            banyakTitik = scanner.nextInt();
+            scanner.nextLine();
+        }
         int i, j;
         String[] xy;
-        Matrix dummyMatrix = new Matrix(derajatPolinomial+1, derajatPolinomial+2);
-        for (i = 0; i < derajatPolinomial + 1; i++) {
+        Matrix dummyMatrix = new Matrix(banyakTitik, banyakTitik+1);
+
+        for (i = 0; i < banyakTitik; i++) {
             // Mengelola input agar tersimpan pada nilai x dan y
             do {
                 System.out.print("Input the coordinate (x"+i+",y"+i+") : ");
@@ -590,8 +593,8 @@ public class Matrix {
             } while (xy.length != 2);
             double x = Double.parseDouble(xy[0]);
             double y = Double.parseDouble(xy[1]);
-            for (j = 0; j<derajatPolinomial + 2; j++) {
-                if (j == derajatPolinomial + 1) {
+            for (j = 0; j<banyakTitik+1; j++) {
+                if (j == banyakTitik) {
                     dummyMatrix.setElmt(i, j, y);
                 } else {
                     dummyMatrix.setElmt(i, j, Math.pow(x,j));
@@ -602,42 +605,199 @@ public class Matrix {
         double xTaksir = scanner.nextDouble();
         scanner.nextLine(); // dummyMatrix=3x4 solution=2x3
         Double solution[][] = dummyMatrix.gauss().solutionOfGaussMethod();
-        if (solution != null) {
-            System.out.print("f(x) = ");
-            for (i = 0; i < dummyMatrix.getBaris(); i++) { // solution 4x5 ketika polinomial = 3
-                if (i==0){
-                    System.out.print(solution[i][solution[i].length-1] + " + ");
-                } else if (i == solution.length-1) {
-                    System.out.print(solution[i][solution[i].length-1] + "x^" + i);
-                } else {
-                    System.out.print(solution[i][solution[i].length-1] + "x^" + i + " + ");
-                }        
-            }
-            System.out.printf("\n");
-            System.out.print("f("+xTaksir+") = ");
-            for (i = 0; i < solution.length; i++) {
-                if (i==0){
-                    System.out.print(solution[i][solution[i].length-1] + " + ");
-                } else if (i == solution.length-1) {
-                    System.out.print(solution[i][solution[i].length-1] + "("+ xTaksir+")" + "^" + i);
-                } else {
-                    System.out.print(solution[i][solution[i].length-1] + "("+ xTaksir+")" + "^" + i + " + ");
-                }        
-            }
-            double result;
-            result = 0;
-            for (i=0; i<solution.length; i++) {
-                result += solution[i][solution[i].length-1]*Math.pow(xTaksir, i);
-            }
-            System.out.printf("\n");
-            System.out.print("Hasil taksiran adalah : ");
-            System.out.printf("%f", result);
 
-        } else {
-            System.out.println("The coordinate given do not produce any possible interpolation.");
+        boolean system = true;
+        for (i=1; i<dummyMatrix.getBaris(); i++) {
+            if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
+                system = false;
+                break;
+            }
+        }
+
+        if (solution == null || system == false) {
+            System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
+        } else if (solution != null) {
+            for (i = 0; i < solution.length; i++) {
+                if (solution[i][solution[i].length - 1] == null) {
+                    solution[i][solution[i].length - 1] = 0.0; 
+                }
+            }
+            
+            System.out.print("f(x) = ");
+            boolean firstTerm = true; // Add this flag to track the first term
+            for (i = 0; i < dummyMatrix.getBaris(); i++) {
+                double coefficient = solution[i][solution[i].length - 1];
+                if (coefficient != 0) { // Check if coefficient is not zero
+                    if (firstTerm) {
+                        System.out.print(coefficient);
+                        firstTerm = false; // Set the flag to false after printing the first term
+                    } else {
+                        System.out.print(" + ");
+                        if (i == solution.length - 1) {
+                            System.out.print(coefficient + "x^" + i);
+                        } else {
+                            System.out.print(coefficient + "x^" + i);
+                        }
+                    }
+                }
+            }
+            System.out.printf("\n");
+            System.out.print("f(" + xTaksir + ") = ");
+            firstTerm = true; // Reset the flag for the next expression
+            for (i = 0; i < solution.length; i++) {
+                double coefficient = solution[i][solution[i].length - 1];
+                if (coefficient != 0) { // Check if coefficient is not zero
+                    if (firstTerm) {
+                        System.out.print(coefficient);
+                        firstTerm = false; // Set the flag to false after printing the first term
+                    } else {
+                        System.out.print(" + ");
+                        if (i == solution.length - 1) {
+                            System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                        } else {
+                            System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                        }
+                    }
+                }
+            }
+            double result = 0;
+            for (i = 0; i < solution.length; i++) {
+                double coefficient = solution[i][solution[i].length - 1];
+                result += coefficient * Math.pow(xTaksir, i);
+            }
+            System.out.printf("\n");
+            if (result != 0) { // Check if the result is not zero
+                System.out.print("Hasil taksiran adalah : ");
+                System.out.printf("%f\n", result);
+            }
         }
 
     }
+
+    public static void polinomialInterpolationByFile(String filename) {
+        try {
+            File file = new File(filename);
+            Scanner sc = new Scanner(file);
+
+            int jumlahBaris = 0;
+            while (sc.hasNextLine()) {
+                sc.nextLine();
+                jumlahBaris++;
+            }
+
+            int banyakTitik = jumlahBaris - 1;
+            if (banyakTitik <= 1) {
+                System.out.println("Your input file does not have sufficient coordinates. You need at least to input two coordinates.");
+            } else {
+                try {
+                    Matrix dummyMatrix = new Matrix(banyakTitik, banyakTitik + 1);
+
+                    sc.close();
+                    sc = new Scanner(file);
+
+                    int i = 0;
+                    double xTaksir = 0.0; // Initialize xTaksir
+                    while (sc.hasNextLine() && i < banyakTitik) {
+                        String[] inputValues = sc.nextLine().split(" ");
+                        double x = Double.parseDouble(inputValues[0]);
+                        double y = Double.parseDouble(inputValues[1]);
+
+                        for (int j = 0; j < banyakTitik + 1; j++) {
+                            if (j == banyakTitik) {
+                                dummyMatrix.setElmt(i, j, y);
+                            } else {
+                                dummyMatrix.setElmt(i, j, Math.pow(x, j));
+                            }
+                        }
+                        i++;
+                    }
+
+                    // Read the last line as xTaksir
+                    if (sc.hasNextLine()) {
+                        xTaksir = Double.parseDouble(sc.nextLine());
+                    }
+
+                    sc.close();
+
+                    Double solution[][] = dummyMatrix.gauss().solutionOfGaussMethod();
+                    
+                    boolean system = true;
+                    for (i=1; i<dummyMatrix.getBaris(); i++) {
+                        if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
+                            system = false;
+                            break;
+                        }
+                    }
+
+                    if (solution == null || system == false) {
+                        System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
+                    } else if (solution != null) {
+                        for (i = 0; i < solution.length; i++) {
+                            if (solution[i][solution[i].length - 1] == null) {
+                                solution[i][solution[i].length - 1] = 0.0; 
+                            }
+                        }
+                        System.out.print("f(x) = ");
+                        boolean firstTerm = true; // Add this flag to track the first term
+                        for (i = 0; i < dummyMatrix.getBaris(); i++) {
+                            double coefficient = solution[i][solution[i].length - 1];
+                            if (coefficient != 0) { // Check if coefficient is not zero
+                                if (firstTerm) {
+                                    System.out.print(coefficient);
+                                    firstTerm = false; // Set the flag to false after printing the first term
+                                } else {
+                                    System.out.print(" + ");
+                                    if (i == solution.length - 1) {
+                                        System.out.print(coefficient + "x^" + i);
+                                    } else {
+                                        System.out.print(coefficient + "x^" + i);
+                                    }
+                                }
+                            }
+                        }
+                        System.out.printf("\n");
+                        System.out.print("f(" + xTaksir + ") = ");
+                        firstTerm = true; // Reset the flag for the next expression
+                        for (i = 0; i < solution.length; i++) {
+                            double coefficient = solution[i][solution[i].length - 1];
+                            if (coefficient != 0) { // Check if coefficient is not zero
+                                if (firstTerm) {
+                                    System.out.print(coefficient);
+                                    firstTerm = false; // Set the flag to false after printing the first term
+                                } else {
+                                    System.out.print(" + ");
+                                    if (i == solution.length - 1) {
+                                        System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                                    } else {
+                                        System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                                    }
+                                }
+                            }
+                        }
+                        double result = 0;
+                        for (i = 0; i < solution.length; i++) {
+                            double coefficient = solution[i][solution[i].length - 1];
+                            result += coefficient * Math.pow(xTaksir, i);
+                        }
+                        System.out.printf("\n");
+                        if (result != 0) { // Check if the result is not zero
+                            System.out.print("Hasil taksiran adalah : ");
+                            System.out.printf("%f\n", result);
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.print("\n");
+                    System.out.println("File " + filename + " not found in this directory.");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.print("\n");
+            System.out.println("File " + filename + " not found in this directory.");
+        }
+    }
+
+
+
 
     public boolean isAllNull(Double[] row){
         for (int i = 0; i < row.length ; i++ ){
@@ -666,7 +826,12 @@ public class Matrix {
                             if( ans[i][j] != 0D){
                                 
                                 if(!first){
-                                    str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    if(ans[i][j] > 0){
+                                        str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    }else{
+                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j]) )+ strSol[j] );
+                                    }
+                                    
                                 }else{
                                     str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
                                     first = false;
@@ -675,7 +840,12 @@ public class Matrix {
                         }else{
                             if(!first){
                                 if(ans[i][j] != 0D){
-                                    str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                    if(ans[i][j] > 0){
+                                        str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                    }else{
+                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j])));
+                                    }
+                                    
                                 }
                                  
                             }else{

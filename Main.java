@@ -50,12 +50,34 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
     Matrix inputMatrix = null;
     
     if (choice == 1) {
-        System.out.print("Input how many rows the matrix will have: ");
-        int jumlahBaris = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Input how many columns the matrix will have: ");
-        int jumlahKolom = scanner.nextInt();
-        scanner.nextLine();
+        int jumlahBaris = 0;
+        int jumlahKolom = 0;
+
+        boolean validInput = false; 
+        while (validInput == false) {
+            try {
+                System.out.print("Input how many rows the matrix will have: ");
+                jumlahBaris = scanner.nextInt();
+                scanner.nextLine();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.nextLine();
+            }
+        }
+
+        validInput = false; 
+        while (validInput == false) {
+            try {
+                System.out.print("Input how many columns the matrix will have: ");
+                jumlahKolom = scanner.nextInt();
+                scanner.nextLine();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.nextLine();
+            }
+        }
 
         inputMatrix = new Matrix(jumlahBaris, jumlahKolom);
         inputMatrix.bacaMatriks(scanner);
@@ -189,6 +211,12 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                         SHOW_INVERSE_SUBMENU();
                     } else if (menu == 5) {
                         INPUT_MATRIX_SUBMENU(scanner);
+                    } else if (menu == 6) {
+                        WRONG_INPUT_REMINDER();
+                        System.out.println("How do you want to input your coordinates?");
+                        System.out.println("1. By inputting manually via program.");
+                        System.out.println("2. By reading .txt file");
+                        System.out.println();
                     }
                 }
             } catch (InputMismatchException e) {
@@ -208,6 +236,11 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                         SHOW_INVERSE_SUBMENU();
                     } else if (menu == 5) {
                         INPUT_MATRIX_SUBMENU(scanner);
+                    } else if (menu == 6) {
+                        System.out.println("How do you want to input your coordinates?");
+                        System.out.println("1. By inputting manually via program.");
+                        System.out.println("2. By reading .txt file");
+                        System.out.println();
                     }
                 }
                 choice = 0;
@@ -260,7 +293,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                         } else if (linearEqSubMenuChoice == 4) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                            System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
+                            System.out.println("The result of Cramer method for the system of linear equation is the following :");
                             currentMatrix.SPLwithCramerMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
@@ -349,7 +382,24 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 SHOW_GREETINGS_TO_USER();
                 System.out.println("Welcome to polinomial interpolation !");
                 System.out.println("==================================================");
-                Matrix.polinomialInterpolation(scanner);
+                System.out.println("How do you want to input your coordinates?");
+                System.out.println("1. By inputting manually via program.");
+                System.out.println("2. By reading .txt file");
+                System.out.println();
+                int interpolationChoice = GET_VALID_CHOICE(scanner, 1, 2, 6);
+                if (interpolationChoice == 1) {
+                    Matrix.polinomialInterpolation(scanner);
+                } else if (interpolationChoice == 2) {
+                    System.out.print("Input the filename and don't forget to include .txt : ");
+                    String filename;
+                    do {
+                        filename = scanner.nextLine();
+                        if (!filename.endsWith(".txt")) {
+                            System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                        }
+                    } while (!filename.endsWith(".txt"));
+                    Matrix.polinomialInterpolationByFile(filename);;
+                }
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 5) { // Multiple Linear Regression
                 // Handle choice 5
