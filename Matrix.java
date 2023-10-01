@@ -213,8 +213,8 @@ public class Matrix {
         return m;
     }
 
-    public boolean isSquareMatrix() {
-        if (this.getBaris() == this.getKolom()-1) {
+    public boolean isGotDeterminant() {
+        if (this.getBaris() == this.getKolom()) {
             return true;
         }
         return false;
@@ -266,7 +266,7 @@ public class Matrix {
 
     // Determinant
     public double determinantWithCofExpansion() {
-        if (this.isSquareMatrix()) {
+        if (this.isGotDeterminant()) {
             int j;
             double sum = 0;
 
@@ -295,7 +295,7 @@ public class Matrix {
     }
 
     public double determinantWithReduksiBaris() {
-        if (this.isSquareMatrix()) {
+        if (this.isGotDeterminant()) {
             Matrix dummyMatrix = new Matrix();
             dummyMatrix = this.copyMatrix();
             int baris = dummyMatrix.getBaris();
