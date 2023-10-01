@@ -244,13 +244,14 @@ public class Matrix {
 
     public Matrix adjoinMatrix () {
         Matrix dummyMatrix = this.copyMatrix();
+        Matrix saveMatrix = dummyMatrix;
         int i, j;
         for (i=0; i<dummyMatrix.getBaris(); i++) {
             for (j=0; j<dummyMatrix.getKolom(); j++) {
                 if ((i+j)%2 == 0) {
-                    dummyMatrix.setElmt(i, j, subMatrix(i, j).determinantWithReduksiBaris());
+                    dummyMatrix.setElmt(i, j, saveMatrix.subMatrix(i,j).determinantWithReduksiBaris());
                 } else {
-                    dummyMatrix.setElmt(i, j, -1*subMatrix(i, j).determinantWithReduksiBaris());
+                    dummyMatrix.setElmt(i, j, -1*(saveMatrix.subMatrix(i, j).determinantWithReduksiBaris()));
                 }
             }
         }
@@ -476,13 +477,13 @@ public class Matrix {
 
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
-        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
-            System.out.println("This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
+        if (dummyMatrix.getBaris() != dummyMatrix.getKolom()) {
+            System.out.println("This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
         } else {
-            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            if (dummyMatrix.determinantWithReduksiBaris() == 0) {
                 System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
             } else {
-                Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+                Matrix A = dummyMatrix.inverseWithAdjMethod();
                 Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
                 for (int i = 0; i < dummyMatrix.getBaris(); i++) {
@@ -561,16 +562,18 @@ public class Matrix {
     public Matrix inverseWithAdjMethod () {
         Matrix dummyMatrix = this.copyMatrix();
         int i, j;
-        if (dummyMatrix.determinantWithReduksiBaris() == 0) {
+        double saveDeterminant = dummyMatrix.determinantWithReduksiBaris();
+        if (saveDeterminant == 0) {
             return null;
         } else {
-            double saveDeterminant = dummyMatrix.determinantWithReduksiBaris();
             dummyMatrix = dummyMatrix.adjoinMatrix();
+           
             for (i=0; i<dummyMatrix.getBaris(); i++) {
                 for (j=0; j<dummyMatrix.getKolom(); j++) {
                     dummyMatrix.setElmt(i, j, 1/saveDeterminant * dummyMatrix.getElmt(i, j));
                 }
             }
+            
         }
         return dummyMatrix;
     }

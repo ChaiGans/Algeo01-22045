@@ -30,7 +30,7 @@ public class Main {
         }
     }
 
-    public static Matrix INPUT_MATRIX_SUBMENU(Scanner scanner) {
+    public static Matrix INPUT_MATRIX_SUBMENU(Scanner scanner, int sq) {
         int choice;
 
         System.out.println("How do you want to input your matrix?");
@@ -38,61 +38,86 @@ public class Main {
         System.out.println("2. By reading .txt file");
         System.out.println();
 
-        choice = GET_VALID_CHOICE(scanner, 1, 2, 5);
-        Matrix currentMatrix = INPUT_MATRIX(choice, scanner);
+        choice = GET_VALID_CHOICE(scanner, 1, 2, 5, 1);
+        Matrix currentMatrix = INPUT_MATRIX(choice, scanner, sq);
         System.out.println();
         return currentMatrix;
     }
 
 
 
-public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
+public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
+    //sq==0, not square ; sq==1, is square
     Matrix inputMatrix = null;
     
     if (choice == 1) {
         int jumlahBaris = 0;
         int jumlahKolom = 0;
 
-        boolean validInput = false;
+        if (sq == 0) {
+            boolean validInput = false;
 
-        while (!validInput) {
-            try {
-                System.out.print("Input how many rows the matrix will have (enter a positive integer): ");
-                jumlahBaris = scanner.nextInt();
-                scanner.nextLine();
-                if (jumlahBaris > 0) {
-                    validInput = true;
-                } else {
-                    System.out.println("Row of matrix can't ever be zero or lower.");
+            while (!validInput) {
+                try {
+                    System.out.print("Input how many rows the matrix will have (enter a positive integer): ");
+                    jumlahBaris = scanner.nextInt();
+                    scanner.nextLine();
+                    if (jumlahBaris > 0) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Row of matrix can't ever be zero or lower.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                    scanner.nextLine();
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter an integer.");
-                scanner.nextLine();
             }
+
+            validInput = false;
+
+            while (!validInput) {
+                try {
+                    System.out.print("Input how many columns the matrix will have (enter a positive integer): ");
+                    jumlahKolom = scanner.nextInt();
+                    scanner.nextLine();
+                    if (jumlahKolom > 0) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Column of matrix can't ever be zero or lower.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                    scanner.nextLine();
+                }
+            }
+        } else if (sq==1) {
+            boolean validInput = false;
+
+            while (!validInput) {
+                try {
+                    System.out.print("Input the matrix size NxN, Input N: ");
+                    jumlahBaris = scanner.nextInt();
+                    scanner.nextLine();
+                    if (jumlahBaris > 0) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Row of matrix can't ever be zero or lower.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                    scanner.nextLine();
+                }
+            }
+
+            jumlahKolom = jumlahBaris;
         }
 
-        validInput = false;
-
-        while (!validInput) {
-            try {
-                System.out.print("Input how many columns the matrix will have (enter a positive integer): ");
-                jumlahKolom = scanner.nextInt();
-                scanner.nextLine();
-                if (jumlahKolom > 0) {
-                    validInput = true;
-                } else {
-                    System.out.println("Column of matrix can't ever be zero or lower.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter an integer.");
-                scanner.nextLine();
-            }
-        }
+     
 
         boolean inputIsValid = false;
 
         while (!inputIsValid) {
-            System.out.println("Enter your augmented matrix with " + jumlahBaris + "x" + jumlahKolom + " matrix size.");
+            System.out.println("Enter your matrix with " + jumlahBaris + "x" + jumlahKolom + " matrix size.");
             inputMatrix = new Matrix(jumlahBaris, jumlahKolom);
             try {
                 inputMatrix.bacaMatriks(scanner);
@@ -194,6 +219,9 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
             ASK_FOR_CHOICE_MESSAGE();
             choice = scanner.nextInt();
             scanner.nextLine();
+            if (choice <= 0 || choice > 2) {
+                WRONG_INPUT_REMINDER();
+            }
         } while (choice <= 0 || choice > 2);
         if (choice == 1) {
             CLEAR_TERMINAL();
@@ -215,7 +243,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         return false;
     }
 
-    public static int GET_VALID_CHOICE(Scanner scanner, int leastChoice, int highestChoice, int menu) {
+    public static int GET_VALID_CHOICE(Scanner scanner, int leastChoice, int highestChoice, int menu, int sq) {
         int choice = -1; // Initialize choice to an invalid value
         do {
             try {
@@ -233,7 +261,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     } else if (menu == 4) {
                         SHOW_INVERSE_SUBMENU();
                     } else if (menu == 5) {
-                        INPUT_MATRIX_SUBMENU(scanner);
+                        INPUT_MATRIX_SUBMENU(scanner, sq);
                     } else if (menu == 6) {
                         WRONG_INPUT_REMINDER();
                         System.out.println("How do you want to input your coordinates?");
@@ -258,7 +286,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     } else if (menu == 4) {
                         SHOW_INVERSE_SUBMENU();
                     } else if (menu == 5) {
-                        INPUT_MATRIX_SUBMENU(scanner);
+                        INPUT_MATRIX_SUBMENU(scanner, sq);
                     } else if (menu == 6) {
                         System.out.println("How do you want to input your coordinates?");
                         System.out.println("1. By inputting manually via program.");
@@ -283,7 +311,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
             SHOW_GREETINGS_TO_USER();
             SHOW_MAIN_MENU();
             reuseConfirmation = false;         
-            mainMenuChoice = GET_VALID_CHOICE(scanner, 1, 7, 1);
+            mainMenuChoice = GET_VALID_CHOICE(scanner, 1, 7, 1, 1);
             if (mainMenuChoice == 1) { // Linear of Equation System
                 int linearEqSubMenuChoice = 0;
                 CLEAR_TERMINAL();
@@ -291,31 +319,31 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_LINEAR_EQUATION_SUBMENU();
                     previousMenu = false;
-                        linearEqSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 5, 2);
+                        linearEqSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 5, 2, 1);
                         CLEAR_TERMINAL();
                         if (linearEqSubMenuChoice == 1) {
-                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Gauss method for the system of linear equation is the following :");
                             currentMatrix.GaussMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
                             
                         } else if (linearEqSubMenuChoice == 2) {
-                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
                             currentMatrix.GaussJordanMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                         } else if (linearEqSubMenuChoice == 3) {
-                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Inverse Method (AX=B -> X=(A^-1)B) method for the system of linear equation is the following :");
                             currentMatrix.SPLwithInverseMethod();
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                         } else if (linearEqSubMenuChoice == 4) {
-                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                            Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Cramer method for the system of linear equation is the following :");
                             currentMatrix.SPLwithCramerMethod();
 
@@ -334,26 +362,22 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_DETERMINANT_SUBMENU();
                     previousMenu = false;
-                    determinantSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 3);
+                    determinantSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 3, 1);
                     CLEAR_TERMINAL();
                     if (determinantSubMenuChoice == 1) {
-                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (Double.isNaN(currentMatrix.makeItSquare().determinantWithReduksiBaris())) {
-                            System.out.println("The matrix do not have any determinant.");
-                        } else {
+                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
+
                             System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
-                            System.out.println(currentMatrix.makeItSquare().determinantWithReduksiBaris());
-                        }
+                            System.out.println(currentMatrix.determinantWithReduksiBaris());
+                        
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 2) {
-                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (Double.isNaN(currentMatrix.makeItSquare().determinantWithCofExpansion())) {
-                            System.out.println("The matrix do not have any determinant.");
-                        } else {
+                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
+
                             System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
-                            System.out.println(currentMatrix.makeItSquare().determinantWithCofExpansion());
-                        }
+                            System.out.println(currentMatrix.determinantWithCofExpansion());
+                        
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 3) {
@@ -369,10 +393,10 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     SHOW_GREETINGS_TO_USER();
                     SHOW_INVERSE_SUBMENU();
                     previousMenu = false;                
-                    inverseSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 4);
+                    inverseSubMenuChoice = GET_VALID_CHOICE(scanner, 1, 3, 4, 1);
                     CLEAR_TERMINAL();
                     if (inverseSubMenuChoice == 1) {
-                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
                         currentMatrix = currentMatrix.inverseWithAdjMethod();
                         if (currentMatrix == null) {
                             System.out.println("Your matrix input does not have inverse.");
@@ -383,7 +407,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (inverseSubMenuChoice == 2) {
-                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
+                        Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
                         currentMatrix = currentMatrix.inverseWithIdentity();
                         if (currentMatrix == null) {
                             System.out.println("Your matrix input does not have inverse.");
@@ -409,7 +433,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                 System.out.println("1. By inputting manually via program.");
                 System.out.println("2. By reading .txt file");
                 System.out.println();
-                int interpolationChoice = GET_VALID_CHOICE(scanner, 1, 2, 6);
+                int interpolationChoice = GET_VALID_CHOICE(scanner, 1, 2, 6, 1);
                 if (interpolationChoice == 1) {
                     Matrix.polinomialInterpolation(scanner);
                 } else if (interpolationChoice == 2) {
