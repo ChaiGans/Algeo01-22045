@@ -348,7 +348,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                     } else if (determinantSubMenuChoice == 2) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (Double.isNaN(currentMatrix.determinantWithCofExpansion())) {
+                        if (Double.isNaN(currentMatrix.makeItSquare().determinantWithCofExpansion())) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
