@@ -57,15 +57,61 @@ public class BicubicSpline{
 
     // Baca Matriks X dari File (Karena Matriks X sudah pasti)
 
-    public static void getX (String filename){
-        // Baca Matriks X dari File
-        // Asumsi di main sudah ada matriks kosong untuk X     
-
-        // Mendapatkan Matriks X dari File
+    public Matrix makeX (Matrix mInput){
+        // Membuat matriks X berdasarkan nilai di matrix BicubicInput
         
-        Matrix matriksX = new Matrix();
-        matriksX.bacaMatriksDariFile(filename);
+        // mInput adalah matriks 16x1 
+        int nBaris = mInput.getBaris();
 
+        Matrix matriksX = new Matrix(nBaris, nBaris);
+
+        //Mengisi Matriks
+        
+        int x; int y;
+        for (int i = 0; i< 16; i++){
+            // Menentukan nilai x dan y
+            if(i%4 == 0){
+                x = 0; y = 0;
+            }
+            else if (i%4 == 1){
+                x = 0; y = 1;
+            }
+            else if (i%4 == 2){
+                x = 1; y = 0;
+            }
+            else /*i%4 == 3 */{
+                x = 1; y = 1;
+            }
+
+            // Pengisian matriks X
+            if (i<4){
+            // Tidak ada differensiasi
+            for (int j = 0; j< 16; j++){
+                matriksX.setElmt(i, j, Math.pow(x,i)*Math.pow(y, j));
+                }   
+            }         
+            else if (i>=4 && i<8){
+            // Partial Derivative respect to x
+            for (int j = 0; j< 16; j++){
+                matriksX.setElmt(i, j, i*Math.pow(x,i-1)*Math.pow(y, j));
+                }
+            }
+            else if (i>=8 && i<12){
+            // Partial Derivative respect to y
+            for (int j = 0; j< 16; j++){
+                matriksX.setElmt(i, j, j*Math.pow(x,i)*Math.pow(y, j-1));
+                }
+            }
+            else /*i>=12 && i<16 */
+            {
+            // Second Partial Derivative respect to xy
+            for (int j = 0; j< 16; j++){
+                matriksX.setElmt(i, j, i*j*Math.pow(x,i-1)*Math.pow(y, j-1));
+                }
+            }
+        }
+   
+        return matriksX;
 
     }
 
