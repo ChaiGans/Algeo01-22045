@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Matrix {
@@ -578,14 +579,21 @@ public class Matrix {
     public static void polinomialInterpolation (Scanner scanner) {
         System.out.print("Input how many coordinates you would like to input: ");
         int banyakTitik = 0;
-        banyakTitik = scanner.nextInt();
-        scanner.nextLine();
-        while (banyakTitik <= 1) {
-            System.out.println("Your input is not valid. To do polinomial interpolation, you at least need to input two coordinates.");
-            System.out.print("Input how many coordinates you would like to input: ");
-            banyakTitik = scanner.nextInt();
-            scanner.nextLine();
+        while (banyakTitik < 2) {
+            try {
+                System.out.print("Input how many coordinates you would like to input (at least 2): ");
+                banyakTitik = scanner.nextInt();
+                scanner.nextLine();
+
+                if (banyakTitik < 2) {
+                    System.out.println("Your input is not valid. To perform polynomial interpolation, you need at least two coordinates.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Your input is not valid. Please input only an integer.");
+                scanner.nextLine(); // Clear the invalid input
+            }
         }
+
         int i, j;
         String[] xy;
         Matrix dummyMatrix = new Matrix(banyakTitik, banyakTitik+1);
