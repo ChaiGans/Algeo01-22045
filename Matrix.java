@@ -610,6 +610,8 @@ public class Matrix {
         for (i=1; i<dummyMatrix.getBaris(); i++) {
             if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
                 system = false;
+            } else {
+                system = true;
                 break;
             }
         }
@@ -725,6 +727,8 @@ public class Matrix {
                     for (i=1; i<dummyMatrix.getBaris(); i++) {
                         if (dummyMatrix.getElmt(i, 1) == dummyMatrix.getElmt(0, 1)) {
                             system = false;
+                        } else {
+                            system = true;
                             break;
                         }
                     }
