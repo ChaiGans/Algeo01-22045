@@ -286,9 +286,9 @@ public class Matrix {
                         sum -= dummyMatrix.data[0][j] * this.subMatrix(0, j).determinantWithCofExpansion();
                     }
                 }
+                return sum;
             }
             
-            return sum;
         } else {
             return Double.NaN;
         }
@@ -475,23 +475,24 @@ public class Matrix {
 
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
-        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
-            System.out.println("SPL ini tidak memiliki bisa diselesaikan dengan matriks balikan karena determinan matriks tersebut sama dengan nol sehingga tidak memiliki invers.");
+        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
+            System.out.println("This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
         } else {
-            Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
-            A.printMatriks();
-            Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
+            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+                System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+            } else {
+                Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+                Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
-            for (int i = 0; i < dummyMatrix.getBaris(); i++) {
-                B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
-            }
-            B.printMatriks();
+                for (int i = 0; i < dummyMatrix.getBaris(); i++) {
+                    B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+                }
 
-            Matrix solution = multiplyMatrix(A, B);
-            solution.printMatriks();
+                Matrix solution = multiplyMatrix(A, B);
 
-            for (int i = 0; i < solution.getBaris(); i++) {
-                System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+                for (int i = 0; i < solution.getBaris(); i++) {
+                    System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+                }
             }
         }
     }
@@ -625,7 +626,7 @@ public class Matrix {
             }
         }
 
-        if (solution == null || system == false) {
+        if (solution == null || system==false) {
             System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
         } else if (solution != null) {
             for (i = 0; i < solution.length; i++) {
@@ -640,7 +641,11 @@ public class Matrix {
                 double coefficient = solution[i][solution[i].length - 1];
                 if (coefficient != 0) { // Check if coefficient is not zero
                     if (firstTerm) {
-                        System.out.print(coefficient);
+                        if (i==0) {
+                            System.out.print(coefficient);
+                        } else {
+                            System.out.print(coefficient + "x^" + i);
+                        }
                         firstTerm = false; // Set the flag to false after printing the first term
                     } else {
                         System.out.print(" + ");
@@ -659,7 +664,11 @@ public class Matrix {
                 double coefficient = solution[i][solution[i].length - 1];
                 if (coefficient != 0) { // Check if coefficient is not zero
                     if (firstTerm) {
-                        System.out.print(coefficient);
+                        if (i==0) {
+                            System.out.print(coefficient);
+                        } else {
+                            System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                        }
                         firstTerm = false; // Set the flag to false after printing the first term
                     } else {
                         System.out.print(" + ");
@@ -742,7 +751,7 @@ public class Matrix {
                         }
                     }
 
-                    if (solution == null || system == false) {
+                    if (solution == null || system==false) {
                         System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
                     } else if (solution != null) {
                         for (i = 0; i < solution.length; i++) {
@@ -750,13 +759,18 @@ public class Matrix {
                                 solution[i][solution[i].length - 1] = 0.0; 
                             }
                         }
+                        
                         System.out.print("f(x) = ");
                         boolean firstTerm = true; // Add this flag to track the first term
                         for (i = 0; i < dummyMatrix.getBaris(); i++) {
                             double coefficient = solution[i][solution[i].length - 1];
                             if (coefficient != 0) { // Check if coefficient is not zero
                                 if (firstTerm) {
-                                    System.out.print(coefficient);
+                                    if (i==0) {
+                                        System.out.print(coefficient);
+                                    } else {
+                                        System.out.print(coefficient + "x^" + i);
+                                    }
                                     firstTerm = false; // Set the flag to false after printing the first term
                                 } else {
                                     System.out.print(" + ");
@@ -775,7 +789,11 @@ public class Matrix {
                             double coefficient = solution[i][solution[i].length - 1];
                             if (coefficient != 0) { // Check if coefficient is not zero
                                 if (firstTerm) {
-                                    System.out.print(coefficient);
+                                    if (i==0) {
+                                        System.out.print(coefficient);
+                                    } else {
+                                        System.out.print(coefficient + "(" + xTaksir + ")" + "^" + i);
+                                    }
                                     firstTerm = false; // Set the flag to false after printing the first term
                                 } else {
                                     System.out.print(" + ");
@@ -798,6 +816,7 @@ public class Matrix {
                             System.out.printf("%f\n", result);
                         }
                     }
+
                 } catch (FileNotFoundException e) {
                     System.out.print("\n");
                     System.out.println("File " + filename + " not found in this directory.");
@@ -808,9 +827,6 @@ public class Matrix {
             System.out.println("File " + filename + " not found in this directory.");
         }
     }
-
-
-
 
     public boolean isAllNull(Double[] row){
         for (int i = 0; i < row.length ; i++ ){

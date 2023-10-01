@@ -338,11 +338,11 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     CLEAR_TERMINAL();
                     if (determinantSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (Double.isNaN(currentMatrix.determinantWithReduksiBaris())) {
+                        if (Double.isNaN(currentMatrix.makeItSquare().determinantWithReduksiBaris())) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
-                            System.out.println(currentMatrix.determinantWithReduksiBaris());
+                            System.out.println(currentMatrix.makeItSquare().determinantWithReduksiBaris());
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -352,7 +352,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
-                            System.out.println(currentMatrix.determinantWithCofExpansion());
+                            System.out.println(currentMatrix.makeItSquare().determinantWithCofExpansion());
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
