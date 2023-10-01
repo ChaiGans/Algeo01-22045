@@ -213,8 +213,8 @@ public class Matrix {
         return m;
     }
 
-    public boolean isGotDeterminant() {
-        if (this.getBaris() == this.getKolom()) {
+    public boolean isSquareMatrix() {
+        if (this.getBaris() == this.getKolom()-1) {
             return true;
         }
         return false;
@@ -266,7 +266,7 @@ public class Matrix {
 
     // Determinant
     public double determinantWithCofExpansion() {
-        if (this.isGotDeterminant()) {
+        if (this.isSquareMatrix()) {
             int j;
             double sum = 0;
 
@@ -295,7 +295,7 @@ public class Matrix {
     }
 
     public double determinantWithReduksiBaris() {
-        if (this.isGotDeterminant()) {
+        if (this.isSquareMatrix()) {
             Matrix dummyMatrix = new Matrix();
             dummyMatrix = this.copyMatrix();
             int baris = dummyMatrix.getBaris();
@@ -357,14 +357,21 @@ public class Matrix {
     // Sistem Persamaan Linear
     public void SPLwithCramerMethod () {
         int i;
-        Matrix dummyMatrix = new Matrix ();
-        dummyMatrix = this.copyMatrix();
-        double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-        for (i = 0; i < this.getKolom()-1; i++) {
-            dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
-            double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
-            System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
-            dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+        Matrix dummyMatrix = this.copyMatrix();
+        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
+            System.out.println("This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
+        } else {
+            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+            } else {
+                double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+                for (i = 0; i < this.getKolom()-1; i++) {
+                    dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+                    double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
+                    System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
+                    dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
+                }
+            }
         }
     }
 
@@ -468,24 +475,26 @@ public class Matrix {
 
     public void SPLwithInverseMethod() {
         Matrix dummyMatrix = this.copyMatrix();
-        Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
-        A.printMatriks();
-        Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
+        if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
+            System.out.println("SPL ini tidak memiliki bisa diselesaikan dengan matriks balikan karena determinan matriks tersebut sama dengan nol sehingga tidak memiliki invers.");
+        } else {
+            Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
+            A.printMatriks();
+            Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
-        for (int i = 0; i < dummyMatrix.getBaris(); i++) {
-            B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
-        }
-        B.printMatriks();
+            for (int i = 0; i < dummyMatrix.getBaris(); i++) {
+                B.setElmt(i, 0, dummyMatrix.getElmt(i, dummyMatrix.getKolom() - 1));
+            }
+            B.printMatriks();
 
-        Matrix solution = multiplyMatrix(A, B);
-        solution.printMatriks();
+            Matrix solution = multiplyMatrix(A, B);
+            solution.printMatriks();
 
-        for (int i = 0; i < solution.getBaris(); i++) {
-            System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+            for (int i = 0; i < solution.getBaris(); i++) {
+                System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+            }
         }
     }
-
-
 
     // INVERSE MATRIX METHOD
     public Matrix inverseWithIdentity () {
@@ -1035,7 +1044,7 @@ public class Matrix {
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gauss(); // Membuat Matrix jadi eselon 
         System.out.println("\nThis is the the OBE result: ");
-        this.printMatriks();
+        dummyMatrix.printMatriks();
         System.out.println("\n");
 
         
@@ -1048,7 +1057,7 @@ public class Matrix {
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gaussJordan();
         System.out.println("\nThis is the the OBE result: ");
-        this.printMatriks();
+        dummyMatrix.printMatriks();
         System.out.println("\n");
 
         dummyMatrix.OperationMatrix();

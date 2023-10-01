@@ -53,34 +53,57 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
         int jumlahBaris = 0;
         int jumlahKolom = 0;
 
-        boolean validInput = false; 
-        while (validInput == false) {
+        boolean validInput = false;
+
+        while (!validInput) {
             try {
-                System.out.print("Input how many rows the matrix will have: ");
+                System.out.print("Input how many rows the matrix will have (enter a positive integer): ");
                 jumlahBaris = scanner.nextInt();
                 scanner.nextLine();
-                validInput = true;
+                if (jumlahBaris > 0) {
+                    validInput = true;
+                } else {
+                    System.out.println("Row of matrix can't ever be zero or lower.");
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter an integer.");
                 scanner.nextLine();
             }
         }
 
-        validInput = false; 
-        while (validInput == false) {
+        validInput = false;
+
+        while (!validInput) {
             try {
-                System.out.print("Input how many columns the matrix will have: ");
+                System.out.print("Input how many columns the matrix will have (enter a positive integer): ");
                 jumlahKolom = scanner.nextInt();
                 scanner.nextLine();
-                validInput = true;
+                if (jumlahKolom > 0) {
+                    validInput = true;
+                } else {
+                    System.out.println("Column of matrix can't ever be zero or lower.");
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter an integer.");
                 scanner.nextLine();
             }
         }
 
-        inputMatrix = new Matrix(jumlahBaris, jumlahKolom);
-        inputMatrix.bacaMatriks(scanner);
+        boolean inputIsValid = false;
+
+        while (!inputIsValid) {
+            System.out.println("Enter your augmented matrix with " + jumlahBaris + "x" + jumlahKolom + " matrix size.");
+            inputMatrix = new Matrix(jumlahBaris, jumlahKolom);
+            try {
+                inputMatrix.bacaMatriks(scanner);
+                inputIsValid = true;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("You enter less than you must do. Please reenter the matrix.");
+            } catch (NumberFormatException e) {
+                System.out.println("The matrix element must be integer. Please reenter the matrix.");
+            }
+        }
+
     } else if (choice == 2) {
         System.out.print("Input the filename and don't forget to include .txt : ");
         String filename;
@@ -315,7 +338,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
                     CLEAR_TERMINAL();
                     if (determinantSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (currentMatrix.determinantWithReduksiBaris() == Double.NaN) {
+                        if (Double.isNaN(currentMatrix.determinantWithReduksiBaris())) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
@@ -325,7 +348,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner) {
 
                     } else if (determinantSubMenuChoice == 2) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner);
-                        if (currentMatrix.determinantWithCofExpansion() == Double.NaN) {
+                        if (Double.isNaN(currentMatrix.determinantWithCofExpansion())) {
                             System.out.println("The matrix do not have any determinant.");
                         } else {
                             System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
