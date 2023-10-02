@@ -418,11 +418,13 @@ public class Matrix {
     }
 
     // Sistem Persamaan Linear
-    public void SPLwithCramerMethod () {
+    public void SPLwithCramerMethod (Scanner scanner) {
         int i;
         Matrix dummyMatrix = this.copyMatrix();
+        StringBuffer str = new StringBuffer();
         if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
             System.out.println("This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
+            Matrix.OutputToFile(scanner, "This SPL cant be finished using cramer method, because the SPL is not on square matrix format.");
         } else {
             if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
             System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
@@ -432,8 +434,10 @@ public class Matrix {
                     dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
                     double determinantX = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
                     System.out.printf("X%d bernilai %.4f\n", i, determinantX/save);
+                    str.append(String.format("X%d bernilai %.4f\n", i, determinantX/save));
                     dummyMatrix = dummyMatrix.changeCol(i, dummyMatrix.getKolom()-1);
                 }
+                Matrix.OutputToFile(scanner, str.toString());
             }
         }
     }
@@ -536,8 +540,9 @@ public class Matrix {
         return dummyMatrix;
     }
 
-    public void SPLwithInverseMethod() {
+    public void SPLwithInverseMethod(Scanner scanner) {
         Matrix dummyMatrix = this.copyMatrix();
+        StringBuffer str = new StringBuffer();
         if (dummyMatrix.getBaris() != dummyMatrix.getKolom()) {
             System.out.println("This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
         } else {
@@ -555,8 +560,11 @@ public class Matrix {
 
                 for (int i = 0; i < solution.getBaris(); i++) {
                     System.out.printf("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0));
+                    str.append(String.format("X%d bernilai %.4f\n", i + 1, solution.getElmt(i, 0)));
                 }
             }
+            
+            Matrix.OutputToFile(scanner, str.toString());
         }
     }
 
@@ -700,6 +708,7 @@ public class Matrix {
 
         if (solution == null || system==false) {
             System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
+            Matrix.OutputToFile(scanner, "Interpolasi ini tidak memiliki fungsi polinomial.");
         } else if (solution != null) {
             for (i = 0; i < solution.length; i++) {
                 if (solution[i][solution[i].length - 1] == null) {
@@ -761,6 +770,8 @@ public class Matrix {
             if (result != 0) { // Check if the result is not zero
                 System.out.print("Hasil taksiran adalah : ");
                 System.out.printf("%f\n", result);
+                Matrix.OutputToFile(scanner, "Hasil taksiran adalah : " + String.format("%f\n", result));
+            
             }
         }
 
@@ -826,6 +837,7 @@ public class Matrix {
 
                     if (solution == null || system==false) {
                         System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
+                        Matrix.OutputToFile(sc, "Interpolasi ini tidak memiliki fungsi polinomial.");
                     } else if (solution != null) {
                         for (i = 0; i < solution.length; i++) {
                             if (solution[i][solution[i].length - 1] == null) {
@@ -887,6 +899,7 @@ public class Matrix {
                         if (result != 0) { // Check if the result is not zero
                             System.out.print("Hasil taksiran adalah : ");
                             System.out.printf("%f\n", result);
+                            Matrix.OutputToFile(sc, "Hasil taksiran adalah : " + String.format("%f\n", result));
                         }
                     }
 
@@ -967,11 +980,11 @@ public class Matrix {
         return strReal.toString();
     }
 
-    public void OperationMatrix(){
+    public void OperationMatrix(Scanner scanner){
         Double[][] solution = new Double[this.getKolom()-1][this.getKolom()]; // Variable untuk nampung solution
         int idx = 0,z = 0;
         boolean noSolution = false;
-        Scanner scanner = new Scanner(System.in);
+       
         
         while(z < this.getBaris()){
             if(this.isNoSolution(z)){
@@ -1132,7 +1145,7 @@ public class Matrix {
         }
     }
 
-    public void GaussMethod(){
+    public void GaussMethod(Scanner scanner){
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gauss(); // Membuat Matrix jadi eselon 
         System.out.println("\nThis is the the OBE result: ");
@@ -1141,18 +1154,18 @@ public class Matrix {
 
         
         
-        dummyMatrix.OperationMatrix();
+        dummyMatrix.OperationMatrix(scanner);
         
     }
 
-    public void GaussJordanMethod (){
+    public void GaussJordanMethod (Scanner scanner){
         Matrix dummyMatrix = new Matrix();
         dummyMatrix = this.gaussJordan();
         System.out.println("\nThis is the the OBE result: ");
         dummyMatrix.printMatriks();
         System.out.println("\n");
 
-        dummyMatrix.OperationMatrix();
+        dummyMatrix.OperationMatrix(scanner);
     }
 
 
@@ -1328,11 +1341,11 @@ public class Matrix {
         }        
     }
 
-    public static String MatrixToString(Matrix matrix){
+    public  String MatrixToString(){
         StringBuffer string = new StringBuffer();
-        for (int i = 0; i < matrix.getBaris();i++){
-            for(int j =0; j < matrix.getKolom(); j++){
-                string.append(" " + String.format("%.4f" , matrix.getElmt(i, j)));
+        for (int i = 0; i < this.getBaris();i++){
+            for(int j =0; j < this.getKolom(); j++){
+                string.append(" " + String.format("%.4f" , this.getElmt(i, j)));
             }
             string.append("\n");
         }

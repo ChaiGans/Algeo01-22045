@@ -324,28 +324,28 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         if (linearEqSubMenuChoice == 1) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Gauss method for the system of linear equation is the following :");
-                            currentMatrix.GaussMethod();
+                            currentMatrix.GaussMethod(scanner);
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
                             
                         } else if (linearEqSubMenuChoice == 2) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Gauss-Jordan method for the system of linear equation is the following :");
-                            currentMatrix.GaussJordanMethod();
+                            currentMatrix.GaussJordanMethod(scanner);
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                         } else if (linearEqSubMenuChoice == 3) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Inverse Method (AX=B -> X=(A^-1)B) method for the system of linear equation is the following :");
-                            currentMatrix.SPLwithInverseMethod();
+                            currentMatrix.SPLwithInverseMethod(scanner);
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                         } else if (linearEqSubMenuChoice == 4) {
                             Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 0);
                             System.out.println("The result of Cramer method for the system of linear equation is the following :");
-                            currentMatrix.SPLwithCramerMethod();
+                            currentMatrix.SPLwithCramerMethod(scanner);
 
                             reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -367,17 +367,19 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                     if (determinantSubMenuChoice == 1) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
 
-                            System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
-                            System.out.println(currentMatrix.determinantWithReduksiBaris());
+                        System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
+                        System.out.println(currentMatrix.determinantWithReduksiBaris());
+
+                        Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithReduksiBaris());
                         
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 2) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
 
-                            System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
-                            System.out.println(currentMatrix.determinantWithCofExpansion());
-                        
+                        System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
+                        System.out.println(currentMatrix.determinantWithCofExpansion());
+                        Matrix.OutputToFile(scanner, "The result of matrix determinant by using Cofactor Expansion Method is :" + currentMatrix.determinantWithCofExpansion());
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 3) {
@@ -400,9 +402,11 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         currentMatrix = currentMatrix.inverseWithAdjMethod();
                         if (currentMatrix == null) {
                             System.out.println("Your matrix input does not have inverse.");
+                            Matrix.OutputToFile(scanner, "Your matrix input does not have inverse.");
                         } else {
                             System.out.println("The result of matrix inverse using Adjoint Matrix Method is :");
                             currentMatrix.printMatriks();
+                            Matrix.OutputToFile(scanner,  currentMatrix.MatrixToString());
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
@@ -411,9 +415,11 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         currentMatrix = currentMatrix.inverseWithIdentity();
                         if (currentMatrix == null) {
                             System.out.println("Your matrix input does not have inverse.");
+                            Matrix.OutputToFile(scanner, "Your matrix input does not have inverse.");
                         } else {
                             System.out.println("The result of matrix inverse using Elementary Row Transformation Method is :");
                             currentMatrix.printMatriks();
+                            Matrix.OutputToFile(scanner,currentMatrix.MatrixToString() );
                         }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
