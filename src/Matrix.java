@@ -1265,7 +1265,7 @@ public class Matrix {
             }
         }
         System.out.println();
-        matrixRegresi.GaussMethod();
+
         Double[] predict = new Double[dummyMatrix.getKolom()-2];
         System.out.println("Please input variable value that want to be predicted: ");
         for(int i = 0; i < predict.length; i++){
