@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -1226,5 +1228,39 @@ public class Matrix {
         }
         System.out.println("The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
         
+    }
+
+    public static void OuputToFile(Scanner scanner, String output){
+        System.out.println("Enter the file name that end with .txt where you want to write the answer : ");
+        String filename;
+        try{
+            do {
+                filename = scanner.nextLine();
+                if (!filename.endsWith(".txt")) {
+                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                }
+            } while (!filename.endsWith(".txt"));
+            File outputFile = new File( "../out/" + filename);
+            outputFile.createNewFile();
+            FileWriter outputWriter = new FileWriter("../out/" + filename);
+            outputWriter.write(output);
+            outputWriter.close();
+            System.out.println("Write to file succesfully . . . .");
+        }catch(IOException e){
+            System.out.println("An error occured!");
+            e.printStackTrace();
+        }
+        
+    }
+
+    public static String MatrixToString(Matrix matrix){
+        StringBuffer string = new StringBuffer();
+        for (int i = 0; i < matrix.getBaris();i++){
+            for(int j =0; j < matrix.getKolom(); j++){
+                string.append(" " + String.format("%.4f" , matrix.getElmt(i, j)));
+            }
+            string.append("\n");
+        }
+        return string.toString();
     }
 }
