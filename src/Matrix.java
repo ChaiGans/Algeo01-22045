@@ -971,7 +971,7 @@ public class Matrix {
         Double[][] solution = new Double[this.getKolom()-1][this.getKolom()]; // Variable untuk nampung solution
         int idx = 0,z = 0;
         boolean noSolution = false;
-        
+        Scanner scanner = new Scanner(System.in);
         
         while(z < this.getBaris()){
             if(this.isNoSolution(z)){
@@ -983,6 +983,8 @@ public class Matrix {
         }
         if(noSolution){
             System.out.println("There are no solution.");
+            
+            Matrix.OutputToFile(scanner, "There are no solution. ");
         }else{
             for (int i = this.getBaris() - 1; i >=0 ; i--){
                 // Find index leading 1
@@ -1044,6 +1046,7 @@ public class Matrix {
 
 
             System.out.println(outputSolution(solution));
+            Matrix.OutputToFile(scanner,outputSolution(solution));
 
         }
     }
@@ -1285,30 +1288,44 @@ public class Matrix {
             }
         }
         System.out.println("The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
+
+        Matrix.OutputToFile(scanner,"The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
         
     }
 
-    public static void OuputToFile(Scanner scanner, String output){
-        System.out.println("Enter the file name that end with .txt where you want to write the answer : ");
-        String filename;
-        try{
-            do {
-                filename = scanner.nextLine();
-                if (!filename.endsWith(".txt")) {
-                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
-                }
-            } while (!filename.endsWith(".txt"));
-            File outputFile = new File( "../out/" + filename);
-            outputFile.createNewFile();
-            FileWriter outputWriter = new FileWriter("../out/" + filename);
-            outputWriter.write(output);
-            outputWriter.close();
-            System.out.println("Write to file succesfully . . . .");
-        }catch(IOException e){
-            System.out.println("An error occured!");
-            e.printStackTrace();
+    public static void OutputToFile(Scanner scanner, String output){
+        System.out.print("Do you want to output to file ? (Y / N) ");
+        String choice;
+        while(true){
+            choice = scanner.nextLine();
+            if(choice.toLowerCase().equals("n") || choice.toLowerCase().equals("y")){
+                break;
+            }else{
+                System.out.print("Please enter between Y or N. Re-enter your choice: ");
+                choice = scanner.nextLine();
+            }
         }
-        
+        if(choice.toLowerCase().equals("y")){
+            System.out.print("Enter the file name that end with .txt where you want to write the answer : ");
+            String filename;
+            try{
+                do {
+                    filename = scanner.nextLine();
+                    if (!filename.endsWith(".txt")) {
+                        System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                    }
+                } while (!filename.endsWith(".txt"));
+                File outputFile = new File( "../out/" + filename);
+                outputFile.createNewFile();
+                FileWriter outputWriter = new FileWriter("../out/" + filename);
+                outputWriter.write(output);
+                outputWriter.close();
+                System.out.println("Write to file succesfully . . . .");
+            }catch(IOException e){
+                System.out.println("An error occured!");
+                e.printStackTrace();
+            }
+        }        
     }
 
     public static String MatrixToString(Matrix matrix){
