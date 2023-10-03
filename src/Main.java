@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -130,17 +131,24 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
         }
 
     } else if (choice == 2) {
-        System.out.print("Input the filename and don't forget to include .txt : ");
         String filename;
-        do {
+        while (true) {
+            System.out.print("Input the filename and don't forget to include .txt: ");
             filename = scanner.nextLine();
+
             if (!filename.endsWith(".txt")) {
                 System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                continue; 
             }
-        } while (!filename.endsWith(".txt"));
 
-        inputMatrix = new Matrix();
-        inputMatrix.bacaMatriksDariFile(filename);
+            try {
+                inputMatrix = new Matrix();
+                inputMatrix.bacaMatriksDariFile(filename);
+                break; 
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
+            }
+        }
     }
     
     System.out.println("\nHere is the matrix read by the program:");
@@ -216,13 +224,19 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
         System.out.printf("\n");
         int choice;
         do {
-            ASK_FOR_CHOICE_MESSAGE();
-            choice = scanner.nextInt();
-            scanner.nextLine();
-            if (choice <= 0 || choice > 2) {
-                WRONG_INPUT_REMINDER();
+            try {
+                ASK_FOR_CHOICE_MESSAGE();
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                if (choice <= 0 || choice > 2) {
+                    WRONG_INPUT_REMINDER();
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Oops! The value you input is not in integer type...");
+                scanner.nextLine();
+                choice = 0; 
             }
-        } while (choice <= 0 || choice > 2);
+        } while (choice <= 0 || choice > 2);    
         if (choice == 1) {
             CLEAR_TERMINAL();
             return true;

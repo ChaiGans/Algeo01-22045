@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -43,11 +42,10 @@ public class Matrix {
         }
     }
 
-    public void bacaMatriksDariFile(String filename) {
+    public void bacaMatriksDariFile(String filename) throws FileNotFoundException {
         // Inisialisasi variabel dummyMatrix
         // float[][] dummyMatrix = null;
 
-        try {
             String pathName = "../test/" + filename;
             File file = new File(pathName);
 
@@ -84,12 +82,6 @@ public class Matrix {
             }
 
             sc.close();
-
-        // catch bertujuan untuk menampilkan error kepada user
-        } catch (FileNotFoundException e) {
-            System.out.println("\n");
-            System.out.println("Whoosh! File "+filename+" not found in this directory.");
-        }
     }
 
     public double getElmt(int i, int j) {
@@ -650,11 +642,8 @@ public class Matrix {
     
     // Polinomial Interpolation
     public static void polinomialInterpolation (Scanner scanner) {
-        System.out.print("Input how many coordinates you would like to input: ");
         int banyakTitik = 0;
-        banyakTitik = scanner.nextInt();
-        scanner.nextLine();
-        while (banyakTitik < 2) {
+        do {
             try {
                 System.out.print("Input how many coordinates you would like to input (at least 2): ");
                 banyakTitik = scanner.nextInt();
@@ -667,7 +656,7 @@ public class Matrix {
                 System.out.println("Your input is not valid. Please input only an integer.");
                 scanner.nextLine(); // Clear the invalid input
             }
-        }
+        } while (banyakTitik < 2);
 
         int i, j;
         String[] xy;
@@ -1208,15 +1197,26 @@ public class Matrix {
             }else if(choice == 2){
                 System.out.print("Input the filename and don't forget to include .txt : ");
                 String filename;
-                do {
-                    filename = scanner.nextLine();
-                    if (!filename.endsWith(".txt")) {
-                        System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
-                    }
-                } while (!filename.endsWith(".txt"));
+        do {
+            while (true) {
+                System.out.print("Input the filename and don't forget to include .txt: ");
+                filename = scanner.nextLine();
 
-                inputMatrix = new Matrix();
-                inputMatrix.bacaMatriksDariFile(filename);
+                if (!filename.endsWith(".txt")) {
+                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                    continue; // Continue the loop to re-enter the filename
+                }
+
+                try {
+                    inputMatrix = new Matrix();
+                    inputMatrix.bacaMatriksDariFile(filename);
+                    break; // Exit the loop if the file is successfully read
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
+                    // You can choose to continue the loop or exit the program here based on your requirements.
+                }
+            }
+        } while (!filename.endsWith(".txt"));
             }
         }while(choice != 1 && choice !=  2);
         
@@ -1332,9 +1332,9 @@ public class Matrix {
                         System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
                     }
                 } while (!filename.endsWith(".txt"));
-                File outputFile = new File( "../out/" + filename);
+                File outputFile = new File( "../test/out/" + filename);
                 outputFile.createNewFile();
-                FileWriter outputWriter = new FileWriter("../out/" + filename);
+                FileWriter outputWriter = new FileWriter("../test/out/" + filename);
                 outputWriter.write(output);
                 outputWriter.close();
                 System.out.println("Write to file succesfully . . . .");
