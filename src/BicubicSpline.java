@@ -57,8 +57,8 @@ public class BicubicSpline{
 
     // Baca Matriks X dari File (Karena Matriks X sudah pasti)
 
-    public Matrix makeX (Matrix mInput){
-        // Membuat matriks X berdasarkan nilai di matrix BicubicInput
+    public static Matrix makeX (Matrix mInput){
+    // Membuat matriks X berdasarkan nilai di matrix BicubicInput
         
         // mInput adalah matriks 16x1 
         int nBaris = mInput.getBaris();
@@ -68,52 +68,82 @@ public class BicubicSpline{
         //Mengisi Matriks
         
         int x; int y;
-        for (int i = 0; i< 16; i++){
+        for (int iX = 0; iX< 16; iX++){
             // Menentukan nilai x dan y
-            if(i%4 == 0){
+            if(iX%4 == 0){
                 x = 0; y = 0;
             }
-            else if (i%4 == 1){
+            else if (iX%4 == 1){
                 x = 0; y = 1;
             }
-            else if (i%4 == 2){
+            else if (iX%4 == 2){
                 x = 1; y = 0;
             }
             else /*i%4 == 3 */{
                 x = 1; y = 1;
             }
 
+            int i = 0; int  j = 0;
             // Pengisian matriks X
-            if (i<4){
-            // Tidak ada differensiasi
-            for (int j = 0; j< 16; j++){
-                matriksX.setElmt(i, j, Math.pow(x,i)*Math.pow(y, j));
-                }   
-            }         
-            else if (i>=4 && i<8){
-            // Partial Derivative respect to x
-            for (int j = 0; j< 16; j++){
-                matriksX.setElmt(i, j, i*Math.pow(x,i-1)*Math.pow(y, j));
-                }
-            }
-            else if (i>=8 && i<12){
-            // Partial Derivative respect to y
-            for (int j = 0; j< 16; j++){
-                matriksX.setElmt(i, j, j*Math.pow(x,i)*Math.pow(y, j-1));
-                }
-            }
-            else /*i>=12 && i<16 */
-            {
-            // Second Partial Derivative respect to xy
-            for (int j = 0; j< 16; j++){
-                matriksX.setElmt(i, j, i*j*Math.pow(x,i-1)*Math.pow(y, j-1));
-                }
-            }
-        }
-   
-        return matriksX;
+                for (int iY = 0; iY<16; iY++){
+                    if (iX<4){
+                    // Tidak ada diferensiasi
+                    matriksX.setElmt(iX, iY, Math.pow(x,i)*Math.pow(y, j));
+                    if (i<3){
+                        i++;
+                    }
+                    else {
+                        i = 0; j++;
+                    }
+                    }
 
+                    else if (iX>=4 && iX<8){
+                     // Partial Derivative respect to x
+                        if(i == 0){
+                            matriksX.setElmt(iX, iY, 0); 
+                        }
+                        else{
+                        matriksX.setElmt(iX, iY, i*Math.pow(x,i-1)*Math.pow(y, j));}            
+                        if (i<3){
+                            i++;
+                        }
+                        else {
+                            i = 0; j++;
+                        }
+                    }
+                    else if (iX>=8 && iX<12){
+                    // Partial Derivative respect to y
+                        if (j==0){
+                            matriksX.setElmt(iX, iY, 0); 
+                        }
+                        else{
+                        matriksX.setElmt(iX, iY, j*Math.pow(x,i)*Math.pow(y, j-1));}
+                        if (i<3){
+                            i++;
+                        }
+                        else {
+                            i = 0; j++;
+                        }
+                    }
+                    
+                    else /*i>=12 && i<16 */{
+                    // Second Partial Derivative respect to xy
+                        matriksX.setElmt(iX, iY, i*j*Math.pow(x,i-1)*Math.pow(y, j-1));
+                        if (i<3){
+                            i++;
+                        }
+                        else {
+                            i = 0; j++;
+                        }
+                        }
+                      
+                    
+            }
+            i = 0; j = 0;
+        
     }
+    return matriksX;}
+    
 
 
     // Inverse kan Matriks X
