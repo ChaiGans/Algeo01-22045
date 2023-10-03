@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -1351,4 +1352,225 @@ public class Matrix {
         }
         return string.toString();
     }
+
+    // Bicubic Spline Interpolation
+
+    // Baca matriks input (4x4) dari file
+
+    public static Matrix getmTurunanfile(String filename){
+        Matrix mInput = new Matrix(4,4);
+
+         try {
+            String pathName = "../test/" + filename;
+            File file = new File(pathName);
+
+            Scanner sc = new Scanner(file);
+
+            // Pembacaan file untuk melakukan parsing yang bertujuan untuk memindahkan
+            // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel mInput
+   
+            // Then, read and fill the matrix 4x4
+            int i = 0; 
+            while (i<16) {
+            // i<16 karena dalam file ada matriks 4x4 dan dibawahnya terdapat nilai a dan b
+                String[] inputValues = sc.nextLine().split(" ");
+                for (int j = 0; j < inputValues.length; j++) {
+                    mInput.data[i][j] = Double.parseDouble(inputValues[j]);
+                }
+                i++;
+            }
+
+            sc.close();
+            
+            System.out.println();
+            System.out.println("Matrix Inputan:");
+            mInput.printMatriks();
+            System.out.println();
+           
+
+        // catch bertujuan untuk menampilkan error kepada user
+        } catch (FileNotFoundException e) {
+            System.out.println("File "+filename+" not found in this directory.");
+            System.out.println("Program will shut down. Please re-run the program");
+        }
+        return mInput;
+
+    }
+
+
+
+    // Transform matriks 4x4 ke matriks Turunan 16x1
+    public Matrix transformKeMatriksTurunan(){
+        Matrix matrixTurunan = new Matrix(16,1);
+
+        int idx = 0;
+        for(int i = 0; i<4; i++){
+            for (int j=0; j<4; j++){
+                matrixTurunan.data[idx][0] = this.data[i][j];
+                idx++;
+            }
+        }
+        return matrixTurunan;        
+    }
+
+    //Tools Matriks X Bicubic
+
+    // Cek nilai X
+    public static int checkXBicubic(int row){
+        int x;
+        if (row%4== 0 || row%4 == 2){x = 0;}
+        else{x = 1;}
+        return x;
+    }
+
+    // Cek nilai Y
+    public static int checkYBicubic(int row){
+        int y;
+        if (row%4== 0 || row%4 == 1){y = 0;}
+        else{y = 1;}
+        return y;
+    }
+
+    // Buat Matriks X Bicubic
+
+    public static Matrix makeMatriksX (){   
+        Matrix matriksX = new Matrix(16, 16);
+        int x; int y;
+        for (int iX = 0; iX< 16; iX++){
+                // Menentukan nilai x dan y
+            x = checkXBicubic(iX); y = checkYBicubic(iX);          
+            int i = 0; int  j = 0;
+            // Pengisian matriks X
+            for (int iY = 0; iY<16; iY++){
+                // Tidak ada diferensiasi
+                if (iX<4){
+                    matriksX.setElmt(iX, iY, Math.pow(x,i)*Math.pow(y, j));
+                    if (i<3){i++;}
+                    else {i = 0; j++;}
+                }
+                // Partial Derivative respect to x
+                else if (iX>=4 && iX<8){
+                    if(i == 0){
+                        matriksX.setElmt(iX, iY, 0); 
+                    }
+                    else{
+                        matriksX.setElmt(iX, iY, i*Math.pow(x,i-1)*Math.pow(y, j));
+                    }            
+                    if (i<3){i++;}
+                    else {i = 0; j++;}
+                }
+                // Partial Derivative respect to y
+                else if (iX>=8 && iX<12){
+                    if (j==0){
+                        matriksX.setElmt(iX, iY, 0); 
+                    }
+                    else{
+                        matriksX.setElmt(iX, iY, j*Math.pow(x,i)*Math.pow(y, j-1));
+                    }
+                    if (i<3){i++;}
+                    else {i=0; j++;}
+                }
+                // Second Partial Derivative respect to xy     
+                else /*i>=12 && i<16 */{    
+                    if (i==0 || j==0){
+                        matriksX.setElmt(iX, iY, 0);
+                    }
+                    else{
+                        matriksX.setElmt(iX, iY, i*j*Math.pow(x,i-1)*Math.pow(y, j-1));
+                    }
+                    if (i<3){i++;}
+                    else {i=0; j++;}        
+                }  
+            }
+        // Mereset nilai i dan j
+        i = 0; j = 0;    
+        }
+    return matriksX;
+    }
+
+    // baca nilai a dan b dari file
+
+    public double[] listAandB(String filename){
+        double[] aAndB = new double[2];
+
+        try {
+            String pathName = "../test/" + filename;
+            File file = new File(pathName);
+
+            Scanner sc = new Scanner(file);
+
+            // Pembacaan file untuk melakukan parsing yang bertujuan untuk memindahkan
+            // hasil inputan a dan b dari txt dan disimpan dalam float[] aAndB
+   
+            // 
+            int count = 1;
+            while (count != 5) {
+                sc.nextLine();
+                count++;
+            }
+            // Saat count = 5 alias baris nilai a,b -> Length = 2
+            String[] inputValues = sc.nextLine().split(" ");
+
+            for (int k = 0; k < inputValues.length; k++) {
+                    aAndB[k] = Double.parseDouble(inputValues[k]);
+                }
+
+            sc.close();
+            
+            System.out.println();
+            System.out.println("nilai a dan b adalah: ");
+            System.out.print(aAndB[0]+" ,"+aAndB[1]); // Print a and b
+            System.out.println();
+           
+
+        // catch bertujuan untuk menampilkan error kepada user
+        } catch (FileNotFoundException e) {
+            System.out.println("File "+filename+" not found in this directory.");
+            System.out.println("Program will shut down. Please re-run the program");
+        }
+        return aAndB;
+
+    }
+
+    //Matriks X, matriks turunan, nilai a dan b sudah ada
+
+    public double bicubicSplineInterpolation(){
+        String filename; // Nama file
+        
+        System.out.print("Input the filename and don't forget to include .txt : ");
+        try (Scanner scanner = new Scanner(System.in)) {
+            do {
+                filename = scanner.nextLine();
+                if (!filename.endsWith(".txt")) {
+                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                }
+            } while (!filename.endsWith(".txt"));
+        }
+        Matrix matrixTurunan = getmTurunanfile(filename).transformKeMatriksTurunan(); // Matriks turunan yang baca file lalu diubah ke matriks turunan
+        Matrix matriksX = makeMatriksX(); // Matriks X
+        Matrix matrixKali = multiplyMatrix(matriksX.inverseWithAdjMethod(), matrixTurunan); // a = Xinverse * Turunan
+        double[] listAngkaInterpolasi = listAandB(filename);
+        double fab = 0;
+
+        double a = listAngkaInterpolasi[0]; double b = listAngkaInterpolasi[1];
+
+        int idx = 0; // Untuk akses nilai a_ij di matriks hasilKali
+        for (int j = 0; j<4; j++){
+            for (int i = 0; i<4; i++){
+                fab = fab + matrixKali.getElmt(idx, 0)*Math.pow(a,i)*Math.pow(b,j);
+                idx++;
+            }
+        }  
+        
+        System.out.println();
+        System.out.println("Hasil Intepolasi Spline Bicubic dari f("+a+","+b+") adalah "+fab);
+        return fab;
+    }
+
+
+
+
+
+
+
 }
