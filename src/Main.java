@@ -382,18 +382,25 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
 
                         System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
-                        System.out.println(currentMatrix.determinantWithReduksiBaris());
+                        if (Double.isNaN(currentMatrix.determinantWithReduksiBaris())) {
+                            System.out.printf("This matrix do not have determinant because it is not a square matrix.\n");
+                        } else {
+                            System.out.println(currentMatrix.determinantWithReduksiBaris());
+                            Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithReduksiBaris());
+                        }
 
-                        Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithReduksiBaris());
-                        
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 2) {
                         Matrix currentMatrix = INPUT_MATRIX_SUBMENU(scanner, 1);
 
                         System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
-                        System.out.println(currentMatrix.determinantWithCofExpansion());
-                        Matrix.OutputToFile(scanner, "The result of matrix determinant by using Cofactor Expansion Method is :" + currentMatrix.determinantWithCofExpansion());
+                        if (Double.isNaN(currentMatrix.determinantWithCofExpansion())) {
+                            System.out.printf("This matrix do not have determinant because it is not a square matrix.\n");
+                        } else {
+                            System.out.println(currentMatrix.determinantWithCofExpansion());
+                            Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithCofExpansion());
+                        }
                         reuseConfirmation = REUSE_CONFIRMATION(scanner);
 
                     } else if (determinantSubMenuChoice == 3) {
