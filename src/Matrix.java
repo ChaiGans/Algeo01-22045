@@ -652,6 +652,8 @@ public class Matrix {
     public static void polinomialInterpolation (Scanner scanner) {
         System.out.print("Input how many coordinates you would like to input: ");
         int banyakTitik = 0;
+        banyakTitik = scanner.nextInt();
+        scanner.nextLine();
         while (banyakTitik < 2) {
             try {
                 System.out.print("Input how many coordinates you would like to input (at least 2): ");
@@ -1310,8 +1312,9 @@ public class Matrix {
     public static void OutputToFile(Scanner scanner, String output){
         System.out.print("Do you want to output to file ? (Y / N) ");
         String choice;
+        choice = scanner.nextLine();
         while(true){
-            choice = scanner.nextLine();
+            
             if(choice.toLowerCase().equals("n") || choice.toLowerCase().equals("y")){
                 break;
             }else{
