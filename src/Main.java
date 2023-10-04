@@ -384,6 +384,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         System.out.println("The result of matrix determinant by using 'Reduksi Baris' Method is :");
                         if (Double.isNaN(currentMatrix.determinantWithReduksiBaris())) {
                             System.out.printf("This matrix do not have determinant because it is not a square matrix.\n");
+                            Matrix.OutputToFile(scanner, "This matrix do not have determinant because it is not a square matrix.\n");
                         } else {
                             System.out.println(currentMatrix.determinantWithReduksiBaris());
                             Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithReduksiBaris());
@@ -397,6 +398,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                         System.out.println("The result of matrix determinant by using Cofactor Expansion Method is :");
                         if (Double.isNaN(currentMatrix.determinantWithCofExpansion())) {
                             System.out.printf("This matrix do not have determinant because it is not a square matrix.\n");
+                            Matrix.OutputToFile(scanner, "This matrix do not have determinant because it is not a square matrix.\n");
                         } else {
                             System.out.println(currentMatrix.determinantWithCofExpansion());
                             Matrix.OutputToFile(scanner, "The result of matrix determinant by using 'Reduksi Baris' Method is :" + currentMatrix.determinantWithCofExpansion());
@@ -485,6 +487,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
                 // Handle choice 6
+
             } else if (mainMenuChoice == 7) { // Terminate the program
                 System.out.println("Thank you for using JUN HOK 88's program. Hope you are helped");
                 System.exit(0);
