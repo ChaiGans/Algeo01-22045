@@ -421,6 +421,7 @@ public class Matrix {
         } else {
             if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
             System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
+            Matrix.OutputToFile(scanner, "This SPL does not have any solution because the matrix determinant is 0.");
             } else {
                 double save = dummyMatrix.makeItSquare().determinantWithReduksiBaris();
                 for (i = 0; i < this.getKolom()-1; i++) {
