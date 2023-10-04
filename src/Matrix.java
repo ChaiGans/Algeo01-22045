@@ -210,7 +210,7 @@ public class Matrix {
         return m;
     }
 
-    public boolean isGotDeterminant() {
+    public boolean isSquareMatrix() {
         if (this.getBaris() == this.getKolom()) {
             return true;
         }
@@ -266,7 +266,7 @@ public class Matrix {
 
     // Determinant
     public double determinantWithCofExpansion() {
-        if (this.isGotDeterminant()) {
+        if (this.isSquareMatrix()) {
             int j;
             double sum = 0;
 
@@ -295,63 +295,8 @@ public class Matrix {
     }
 
     public double determinantWithReduksiBaris() {
-        // if (this.isGotDeterminant()) {
-        //     Matrix dummyMatrix = new Matrix();
-        //     dummyMatrix = this.copyMatrix();
-        //     int baris = dummyMatrix.getBaris();
-        //     int kolom = dummyMatrix.getKolom();
-
-            
-        //     int tukar = 0;
-        //     boolean tidakNol = false;
-        //     for (int i = 0; i < baris ; i++){
-        //         tidakNol = false;
-        //         // untuk cek apakah element i,i == 0
-        //         while(tidakNol == false && i<kolom){
-        //             if(dummyMatrix.getElmt(i, i) == 0){         
-        //                 for(int j = i+1; j< baris; j++){
-        //                     if(dummyMatrix.getElmt(j, i) != 0){
-        //                         dummyMatrix = dummyMatrix.changeRow(i, j);
-        //                         tukar += 1;
-        //                         tidakNol = true;
-        //                         break;
-        //                     }
-        //                 } 
-                        
-        //                if(i == kolom -1){
-        //                  break;
-        //                }
-        //             }else{
-        //                 tidakNol = true;
-        //             }
-        //         }
-
-        //         if (tidakNol == true){
-        //             for (int j = 1+i; j<this.getBaris(); j++) {
-                        
-        //                 double rasioPembuatNol = dummyMatrix.getElmt(j, i) / dummyMatrix.getElmt(i, i);
-
-        //                 for (int l = 0; l<this.getKolom(); l++) {
-        //                     dummyMatrix.setElmt(j, l, dummyMatrix.getElmt(j, l)-rasioPembuatNol*dummyMatrix.getElmt(i, l));
-        //                 }                        
-        //             }
-        //         }
-        //     }
-            
-        //     double determinan = Math.pow(-1, tukar);
-        //     for (int i = 0; i < baris; i++){
-        //         determinan *= dummyMatrix.getElmt(i, i);
-        //     }
-        //     if(determinan == -0D){
-        //         determinan = 0;
-        //     }
-            
-        //     return determinan;
-
-        // } else {
-        //     return Double.NaN;
-        // }
-            if (this.isGotDeterminant()) {
+        
+            if (this.isSquareMatrix()) {
                 Matrix dummyMatrix = this.copyMatrix();
                 int baris = dummyMatrix.getBaris();
                 int kolom = dummyMatrix.getKolom();
