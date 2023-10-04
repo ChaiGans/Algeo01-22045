@@ -538,6 +538,7 @@ public class Matrix {
         StringBuffer str = new StringBuffer();
         if (dummyMatrix.getBaris() != dummyMatrix.getKolom()) {
             System.out.println("This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
+            Matrix.OutputToFile(scanner, "This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
         } else {
             if (dummyMatrix.determinantWithReduksiBaris() == 0) {
                 System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
