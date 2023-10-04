@@ -1311,6 +1311,7 @@ public class Matrix {
     }
 
     public static void OutputToFile(Scanner scanner, String output){
+        System.out.println();
         System.out.print("Do you want to output to file ? (Y / N) ");
         String choice;
         choice = scanner.nextLine();
