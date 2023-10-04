@@ -1121,50 +1121,77 @@ public class Matrix {
         int sampel;
         do{
             System.out.print("Masukkan Pilihan: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); // Clear the input buffer
+                System.out.print("Masukkan Pilihan: ");
+            }
             choice = scanner.nextInt();
             scanner.nextLine();
 
             if(choice == 1){
                 System.out.print("Input how many variable: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                    scanner.nextLine(); // Clear the input buffer
+                    System.out.print("Input how many variable: ");
+                }
                 
                 variabel = scanner.nextInt();
                 scanner.nextLine();
                 System.out.print("Input how many sample: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                    scanner.nextLine(); // Clear the input buffer
+                    System.out.print("Input how many sample: ");
+                }
                 
                 sampel = scanner.nextInt();
                 scanner.nextLine();
                 System.out.println("Insert sample with format : x1 x2 ... y");
                 inputMatrix = new Matrix(sampel, variabel+1);
                 for (int i = 0; i < inputMatrix.jumlahBaris; i++) {
-                    System.out.print("Sample " + (i + 1) + " : ");
-                    String[] inputValues = scanner.nextLine().split(" ");
-                    for (int j = 0; j < inputMatrix.jumlahKolom; j++) {
-                        inputMatrix.data[i][j] = Double.parseDouble(inputValues[j]);
-                    }
+                    boolean validInput = false;
+                    while(!validInput){
+                        System.out.print("Sample " + (i + 1) + " : ");
+                        String[] inputValues = scanner.nextLine().split(" ");
+                        if (inputValues.length != variabel + 1) {
+                            System.out.println("Invalid input. Please provide " + (variabel + 1) + " values separated by spaces.");
+                        } else {
+                            try {
+                                for (int j = 0; j < inputMatrix.jumlahKolom; j++) {
+                                    inputMatrix.data[i][j] = Double.parseDouble(inputValues[j]);
+                                }
+                                validInput = true; // Input is valid, exit the loop
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid input. Please enter valid numbers.");
+                            }
+                        }
+                    }                
                 }
             }else if(choice == 2){
                 System.out.print("Input the filename and don't forget to include .txt : ");
                 String filename;
-        do {
-            while (true) {
-                System.out.print("Input the filename and don't forget to include .txt: ");
-                filename = scanner.nextLine();
+                do {
+                    while (true) {
+                        System.out.print("Input the filename and don't forget to include .txt: ");
+                        filename = scanner.nextLine();
 
-                if (!filename.endsWith(".txt")) {
-                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
-                    continue; // Continue the loop to re-enter the filename
-                }
+                        if (!filename.endsWith(".txt")) {
+                            System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                            continue; // Continue the loop to re-enter the filename
+                        }
 
-                try {
-                    inputMatrix = new Matrix();
-                    inputMatrix.bacaMatriksDariFile(filename);
-                    break; // Exit the loop if the file is successfully read
-                } catch (FileNotFoundException e) {
-                    System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
-                    // You can choose to continue the loop or exit the program here based on your requirements.
-                }
-            }
-        } while (!filename.endsWith(".txt"));
+                        try {
+                            inputMatrix = new Matrix();
+                            inputMatrix.bacaMatriksDariFile(filename);
+                            break; // Exit the loop if the file is successfully read
+                        } catch (FileNotFoundException e) {
+                            System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
+                            // You can choose to continue the loop or exit the program here based on your requirements.
+                        }
+                    }
+                } while (!filename.endsWith(".txt"));
             }
         }while(choice != 1 && choice !=  2);
         
@@ -1195,9 +1222,9 @@ public class Matrix {
         for (int i = 0; i < matrixRegresi.jumlahBaris; i++){
             for (int j = 0; j < matrixRegresi.jumlahKolom; j++){
                 if(j != matrixRegresi.jumlahKolom-1){
-                    System.out.format("%.2fb%d",matrixRegresi.getElmt(i, j),j);
+                    System.out.format("%.4fb%d",matrixRegresi.getElmt(i, j),j);
                 }else{
-                    System.out.format("%.2f\n",matrixRegresi.getElmt(i, j));
+                    System.out.format("%.4f\n",matrixRegresi.getElmt(i, j));
                 }
 
                 if(j == matrixRegresi.jumlahKolom-2){
@@ -1222,11 +1249,11 @@ public class Matrix {
             for (int j = 0; j < tempSolution[i].length; j++){
                 if(j == tempSolution[i].length -1){
                     if(i == 0){
-                        System.out.format("%.2f + ",tempSolution[i][j]);
+                        System.out.format("%.4f + ",tempSolution[i][j]);
                     }else if(i==tempSolution.length-1){
-                        System.out.format("%.2fx%d  ",tempSolution[i][j],i);
+                        System.out.format("%.4fx%d  ",tempSolution[i][j],i);
                     }else{
-                        System.out.format("%.2fx%d + ",tempSolution[i][j],i);
+                        System.out.format("%.4fx%d + ",tempSolution[i][j],i);
                     } 
                 }
             }
@@ -1234,13 +1261,20 @@ public class Matrix {
         System.out.println();
 
         Double[] predict = new Double[dummyMatrix.getKolom()-2];
+        StringBuffer strfx = new StringBuffer();
+        strfx.append("f(");
         System.out.println("Please input variable value that want to be predicted: ");
         for(int i = 0; i < predict.length; i++){
             System.out.print("x" + (i+1) + " = ");
             Double input = scanner.nextDouble();
+            scanner.nextLine();
             predict[i] = input;
+            strfx.append(String.format("%.4f", input));
+            if(i != predict.length-1){
+                strfx.append(",");
+            }
         }
-        
+        strfx.append(") = ");
         Double tempDouble = 0D;
         for(int i = 0; i < tempSolution.length; i++){
             if (tempSolution[i][tempSolution[i].length - 1] != null) {
@@ -1251,9 +1285,10 @@ public class Matrix {
                 }
             }
         }
-        System.out.println("The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
+        strfx.append(String.format("%.4f",tempDouble));
+        System.out.println("The result of estimating the function value of the x values is \n" + strfx.toString());
 
-        Matrix.OutputToFile(scanner,"The result of estimating the function value of the x values is " + String.format("%.2f",tempDouble));
+        Matrix.OutputToFile(scanner,"The result of estimating the function value of the x values is \n" + strfx.toString());
         
     }
 
@@ -1442,7 +1477,7 @@ public class Matrix {
 
     // baca nilai a dan b dari file
 
-    public double[] listAandB(String filename){
+    public static double[] listAandB(String filename){
         double[] aAndB = new double[2];
 
         try {
@@ -1486,7 +1521,7 @@ public class Matrix {
 
     //Matriks X, matriks turunan, nilai a dan b sudah ada
 
-    public double bicubicSplineInterpolation(){
+    public static double bicubicSplineInterpolation(){
         String filename; // Nama file
         
         System.out.print("Input the filename and don't forget to include .txt : ");
