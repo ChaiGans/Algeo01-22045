@@ -132,8 +132,9 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
 
     } else if (choice == 2) {
         String filename;
+        System.out.print("Input the filename and don't forget to include .txt: ");
         while (true) {
-            System.out.print("Input the filename and don't forget to include .txt: ");
+            
             filename = scanner.nextLine();
 
             if (!filename.endsWith(".txt")) {
@@ -147,6 +148,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                 break; 
             } catch (FileNotFoundException e) {
                 System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
+                System.out.print("Input the filename and don't forget to include .txt: ");
             }
         }
     }
@@ -487,7 +489,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
                 // Handle choice 6
-
+                Matrix.bicubicSplineInterpolation();
             } else if (mainMenuChoice == 7) { // Terminate the program
                 System.out.println("Thank you for using JUN HOK 88's program. Hope you are helped");
                 System.exit(0);
