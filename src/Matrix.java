@@ -152,7 +152,8 @@ public class Matrix {
 
     public static Matrix multiplyMatrix (Matrix m1, Matrix m2) {
         Matrix dummyMatrix = new Matrix(m1.getBaris(), m2.getKolom());
-        int i, j, k, sum;
+        int i, j, k;
+        double sum;
         for (i=0; i<m1.getBaris(); i++) {
             for (j=0; j<m2.getKolom(); j++) {
                 sum = 0;
@@ -482,14 +483,14 @@ public class Matrix {
     public void SPLwithInverseMethod(Scanner scanner) {
         Matrix dummyMatrix = this.copyMatrix();
         StringBuffer str = new StringBuffer();
-        if (dummyMatrix.getBaris() != dummyMatrix.getKolom()) {
+        if (dummyMatrix.makeItSquare().getBaris() != dummyMatrix.makeItSquare().getKolom()) {
             System.out.println("This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
             Matrix.OutputToFile(scanner, "This SPL cant be finished using Inverse Matrix method, because the SPL is not on square matrix format.");
         } else {
-            if (dummyMatrix.determinantWithReduksiBaris() == 0) {
+            if (dummyMatrix.makeItSquare().determinantWithReduksiBaris() == 0) {
                 System.out.println("This SPL does not have any solution because the matrix determinant is 0.");
             } else {
-                Matrix A = dummyMatrix.inverseWithAdjMethod();
+                Matrix A = dummyMatrix.makeItSquare().inverseWithAdjMethod();
                 Matrix B = new Matrix(dummyMatrix.getBaris(), 1);
 
                 for (int i = 0; i < dummyMatrix.getBaris(); i++) {
