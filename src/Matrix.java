@@ -717,7 +717,7 @@ public class Matrix {
 
     }
 
-    public static void polinomialInterpolationByFile(String filename) {
+    public static void polinomialInterpolationByFile(String filename,Scanner scanner) {
         try {
             String pathname = "../test/" + filename;
             File file = new File(pathname);
@@ -777,7 +777,7 @@ public class Matrix {
 
                     if (solution == null || system==false) {
                         System.out.println("Interpolasi ini tidak memiliki fungsi polinomial.");
-                        Matrix.OutputToFile(sc, "Interpolasi ini tidak memiliki fungsi polinomial.");
+                        Matrix.OutputToFile(scanner, "Interpolasi ini tidak memiliki fungsi polinomial.");
                     } else if (solution != null) {
                         for (i = 0; i < solution.length; i++) {
                             if (solution[i][solution[i].length - 1] == null) {
@@ -839,7 +839,7 @@ public class Matrix {
                         if (result != 0) { // Check if the result is not zero
                             System.out.print("Hasil taksiran adalah : ");
                             System.out.printf("%f\n", result);
-                            Matrix.OutputToFile(sc, "Hasil taksiran adalah : " + String.format("%f\n", result));
+                            Matrix.OutputToFile(scanner, "Hasil taksiran adalah : " + String.format("%f\n", result));
                         }
                     }
 
@@ -882,13 +882,13 @@ public class Matrix {
                                 
                                 if(!first){
                                     if(ans[i][j] > 0){
-                                        str[i].append( " + " + String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                        str[i].append( " + " + String.format("%.4f",ans[i][j] )+ strSol[j] );
                                     }else{
-                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j]) )+ strSol[j] );
+                                        str[i].append( " - " + String.format("%.4f",Math.abs(ans[i][j]) )+ strSol[j] );
                                     }
                                     
                                 }else{
-                                    str[i].append( String.format("%.2f",ans[i][j] )+ strSol[j] );
+                                    str[i].append( String.format("%.4f",ans[i][j] )+ strSol[j] );
                                     first = false;
                                 } 
                             }                           
@@ -896,15 +896,15 @@ public class Matrix {
                             if(!first){
                                 if(ans[i][j] != 0D){
                                     if(ans[i][j] > 0){
-                                        str[i].append( " + " + String.format("%.2f",ans[i][j]));
+                                        str[i].append( " + " + String.format("%.4f",ans[i][j]));
                                     }else{
-                                        str[i].append( " - " + String.format("%.2f",Math.abs(ans[i][j])));
+                                        str[i].append( " - " + String.format("%.4f",Math.abs(ans[i][j])));
                                     }
                                     
                                 }
                                  
                             }else{
-                                str[i].append( String.format("%.2f",ans[i][j])); 
+                                str[i].append( String.format("%.4f",ans[i][j])); 
                                 first = false;
                             }                                
                         }   

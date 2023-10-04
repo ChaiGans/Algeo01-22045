@@ -476,7 +476,7 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                             System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
                         }
                     } while (!filename.endsWith(".txt"));
-                    Matrix.polinomialInterpolationByFile(filename);;
+                    Matrix.polinomialInterpolationByFile(filename,scanner);;
                 }
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 5) { // Multiple Linear Regression
