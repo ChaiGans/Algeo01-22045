@@ -62,7 +62,7 @@ Usahakan melakukan input kepada program dengan sebaik-baiknya sesuai dengan form
 - Issue tracker :
    - Jika menemukan kesalahan bisa melakukan email kepada elbertchailes888@gmail.com atau melakukan line dengan lineid: elbertchailes
 - Github main contributor :
-   - Contributor 1 - https://github.com/ChaiGans
-   - Contributor 2 - https://github.com/Benardo07
-   - Contributor 3 - https://github.com/Kharris-Khisunica
-   - Guide Assistant - https://github.com/maximatey
+   - Contributor 1 (Elbert Chailes) - https://github.com/ChaiGans
+   - Contributor 2 (Benardo) - https://github.com/Benardo07
+   - Contributor 3 (Kharris Khisunica) - https://github.com/Kharris-Khisunica
+   - Guide Assistant (Alex Sander) - https://github.com/maximatey
