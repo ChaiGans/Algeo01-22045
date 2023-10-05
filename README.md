@@ -3,8 +3,8 @@
 
 ## Ringkasan Komposisi Repository
 Program pada repository ini berisi program yang terdiri dari folder _src_, _bin_, _doc_, dan _test_.
-1. Folder **src** berisi source code yang dibuat oleh anggota kelompok kami yang terdiri dari Matrix.java dan Main.java. Segala jenis fungsi dan prosedur yang digunakan untuk memproses matriks untuk menghasilkan hasil sesuai dengan operasi yang digunakan terdapat pada Matrix.java. Sedangkan, Main.java berisi program utama yang dapat dijalankan oleh user dan menjadi User Interface (UI) bagi user. Main.java telah diintegrasi dengan Matrix.java sehingga dapat dilihat cara penggunaan dan mekanisme penggunaan function dan prosedur yang terdapat pada Matrix.java.
-2. Folder **bin** memuat class hasil compile dari Matrix.java dan Main.java.
+1. Folder **src** berisi source code yang dibuat oleh anggota kelompok kami yang terdiri dari `Matrix.java` dan `Main.java`. Segala jenis fungsi dan prosedur yang digunakan untuk memproses matriks untuk menghasilkan hasil sesuai dengan operasi yang digunakan terdapat pada `Matrix.java`. Sedangkan, `Main.java` berisi program utama yang dapat dijalankan oleh user dan menjadi User Interface (UI) bagi user. `Main.java` telah diintegrasi dengan `Matrix.java` sehingga dapat dilihat cara penggunaan dan mekanisme penggunaan function dan prosedur yang terdapat pada `Matrix.java`.
+2. Folder **bin** memuat class hasil compile dari `Matrix.java` dan `Main.java`.
 3. Folder **doc** memuat dokumen laporan hasil pengerjaan tugas besar ini, yang terdiri dari deskripsi masalah, teori singkat, implementasi, eksperimen, dan kesimpulan.
 4. Folder **test** memuat testcase yang terdapat pada studi kasus spesifikasi yang telah diberikan oleh asisten dan di dalam terdapat folder **out** yang menjadi tempat keluaran program dalam bentuk file jika user meminta (format .txt).
    
@@ -45,7 +45,7 @@ Jika directory anda sudah berada pada folder "Algeo01-22045" tersebut maka lakuk
 ```shell
 cd src
 ```
-Maka, sekarang anda akan melihat adanya tiga kode dengan extension .java pada folder tersebut, yaitu Additional.java, Main.java, dan Matrix.java. Dengan code editor yang anda punya, anda bisa melakukan edit kode pada Matrix.java untuk melakukan modifikasi pada fungsi dan prosedur yang dimiliki dan edit kode pada Main.java jika ingin mengubah bentuk tampilan kepada user. Untuk menjalani program hasil modifikasi anda, anda bisa menulis command pada terminal sebagai berikut.
+Maka, sekarang anda akan melihat adanya tiga kode dengan extension .java pada folder tersebut, yaitu `Additional.java`, `Main.java`, dan `Matrix.java`. Dengan code editor yang anda punya, anda bisa melakukan edit kode pada `Matrix.java` untuk melakukan modifikasi pada fungsi dan prosedur yang dimiliki dan edit kode pada `Main.java` jika ingin mengubah bentuk tampilan kepada user. Untuk menjalani program hasil modifikasi anda, anda bisa menulis command pada terminal sebagai berikut.
 ```shell
 javac Main.java
 java Main
