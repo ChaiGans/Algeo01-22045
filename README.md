@@ -4,7 +4,10 @@
 ## Ringkasan Komposisi Repository
 Program pada repository ini berisi program yang terdiri dari folder _src_, _bin_, _doc_, dan _test_.
 1. Folder **src** berisi source code yang dibuat oleh anggota kelompok kami yang terdiri dari `Matrix.java` dan `Main.java`. Segala jenis fungsi dan prosedur yang digunakan untuk memproses matriks untuk menghasilkan hasil sesuai dengan operasi yang digunakan terdapat pada `Matrix.java`. Sedangkan, `Main.java` berisi program utama yang dapat dijalankan oleh user dan menjadi User Interface (UI) bagi user. `Main.java` telah diintegrasi dengan `Matrix.java` sehingga dapat dilihat cara penggunaan dan mekanisme penggunaan function dan prosedur yang terdapat pada `Matrix.java`.
-2. Folder **bin** memuat class hasil compile dari `Matrix.java` dan `Main.java`.
+2. Folder **bin** memuat class hasil compile dari:
+    - `Main.class` adalah Bytecode Java dari `Main.java` yang berkaitan dengan program utama.
+    - `Matrix.class` adalah Bytecode Java dari `Matrix.java` yang berkaitan dengan fungsi atau prosedur dalam pemrosesan operasi matriks.
+    - `Additional.class` adalah Bytecode Java dari `Additional.java` yang berkaitan dengan animasi yang dikeluarkan saat keluar dari program utama.
 3. Folder **doc** memuat dokumen laporan hasil pengerjaan tugas besar ini, yang terdiri dari deskripsi masalah, teori singkat, implementasi, eksperimen, dan kesimpulan.
 4. Folder **test** memuat testcase yang terdapat pada studi kasus spesifikasi yang telah diberikan oleh asisten dan di dalam terdapat folder **out** yang menjadi tempat keluaran program dalam bentuk file jika user meminta (format .txt).
    
