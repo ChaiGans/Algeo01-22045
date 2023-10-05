@@ -38,7 +38,7 @@ public class Main {
         System.out.println("2. By reading .txt file");
         System.out.println();
 
-        choice = GET_VALID_CHOICE(scanner, 1, 2, 5, 1);
+        choice = GET_VALID_CHOICE(scanner, 1, 2, 5, sq);
         Matrix currentMatrix = INPUT_MATRIX(choice, scanner, sq);
         System.out.println();
         return currentMatrix;
