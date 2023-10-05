@@ -1190,6 +1190,9 @@ public class Matrix {
                             System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
                             System.out.print("Input the filename and don't forget to include .txt: ");
                             // You can choose to continue the loop or exit the program here based on your requirements.
+                        } catch (NumberFormatException e) {
+                            System.out.println("There is invalid input on the input file. Make sure the input on the correct format.");
+                            System.out.print("Input the filename and don't forget to include .txt: ");
                         }
                     }
                 } while (!filename.endsWith(".txt"));
