@@ -1344,9 +1344,8 @@ public class Matrix {
 
     // Baca matriks input (4x4) dari file
 
-    public static Matrix getmTurunanfile(String filename){
-        Matrix mInput = new Matrix(4,4);
-
+    public static Matrix getmTurunanFile(String filename){
+        Matrix mInput = new Matrix(4, 4);
          try {
             String pathName = "../test/" + filename;
             File file = new File(pathName);
@@ -1355,16 +1354,20 @@ public class Matrix {
 
             // Pembacaan file untuk melakukan parsing yang bertujuan untuk memindahkan
             // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel mInput
+
+       
    
             // Then, read and fill the matrix 4x4
             int i = 0; 
             while (i<16) {
             // i<16 karena dalam file ada matriks 4x4 dan dibawahnya terdapat nilai a dan b
+                int iBaris = 0;
                 String[] inputValues = sc.nextLine().split(" ");
-                for (int j = 0; j < inputValues.length; j++) {
-                    mInput.data[i][j] = Double.parseDouble(inputValues[j]);
+                for (int iKolom = 0; iKolom < inputValues.length; iKolom++) {
+                    mInput.data[iBaris][iKolom] = Double.parseDouble(inputValues[iKolom]);
+                    i++;
                 }
-                i++;
+                iBaris++;
             }
 
             sc.close();
@@ -1381,19 +1384,34 @@ public class Matrix {
             System.out.println("Program will shut down. Please re-run the program");
         }
         return mInput;
+    }
 
+    // Baca Matriks 4x4 dari terminal
+
+    public static Matrix bacamTurunanTerminal(Scanner scanner) {
+        // Perulangan (Looping) untuk meminta dan mengisi isian matriks
+        Matrix mInput = new Matrix();
+        System.out.println("Masukan matriks turunan: ");
+        System.out.println();
+        for (int i = 0; i < 4; i++) {
+            String[] inputValues = scanner.nextLine().split(" ");
+            for (int j = 0; j < 4; j++) {
+                mInput.data[i][j] = Double.parseDouble(inputValues[j]);
+            }
+        }
+        return mInput;
     }
 
 
 
     // Transform matriks 4x4 ke matriks Turunan 16x1
-    public Matrix transformKeMatriksTurunan(){
+    public static Matrix transformKeMatriksTurunan(Matrix mInput){
         Matrix matrixTurunan = new Matrix(16,1);
 
         int idx = 0;
         for(int i = 0; i<4; i++){
             for (int j=0; j<4; j++){
-                matrixTurunan.data[idx][0] = this.data[i][j];
+                matrixTurunan.data[idx][0] = mInput.data[i][j];
                 idx++;
             }
         }
@@ -1521,25 +1539,76 @@ public class Matrix {
 
     //Matriks X, matriks turunan, nilai a dan b sudah ada
 
-    public static double bicubicSplineInterpolation(){
-        String filename; // Nama file
+    public static void bicubicSplineInterpolation(Scanner scanner){
+        scanner = new Scanner(System.in);
+        Matrix matrixTurunan = new Matrix();
+        double a=0; double b=0;
+
+        System.out.println("How do you want to input your matrix?");
+        System.out.println("1. By inputting manually via program.");
+        System.out.println("2. By reading .txt file");
+        System.out.println();
+
+        int choice;
+
+        do{
+            System.out.println("Masukan Pilihan: ");
+            choice = scanner.nextInt(); scanner.nextLine();
+
+            if (choice == 1){
+                Matrix mInput = bacamTurunanTerminal(scanner);
+                matrixTurunan = transformKeMatriksTurunan(mInput);
+
+                System.out.println();
+                System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
+                matrixTurunan.printMatriks();
+
+                System.out.println();
+                System.out.println("Masukkan nilai a: ");
+
+                a = scanner.nextDouble();
         
-        System.out.print("Input the filename and don't forget to include .txt : ");
-        try (Scanner scanner = new Scanner(System.in)) {
-            do {
-                filename = scanner.nextLine();
-                if (!filename.endsWith(".txt")) {
-                    System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
-                }
-            } while (!filename.endsWith(".txt"));
-        }
-        Matrix matrixTurunan = getmTurunanfile(filename).transformKeMatriksTurunan(); // Matriks turunan yang baca file lalu diubah ke matriks turunan
+                System.out.println();
+                System.out.println("Masukkan nilai b: ");
+        
+                b = scanner.nextDouble();
+            }
+            else if (choice == 2){
+                String filename; // Nama file
+        
+                System.out.print("Masukan nama file yang mengandung matriks turunan dan nilai a dan b. Jangan lupa akhiri dengan .txt: ");
+                do {
+                    filename = scanner.nextLine();
+                    if (!filename.endsWith(".txt")) {
+                        System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
+                        }
+                } while (!filename.endsWith(".txt"));
+        
+                Matrix mInput = getmTurunanFile(filename);
+                matrixTurunan = transformKeMatriksTurunan(mInput);
+
+                double [] listAdanB = listAandB(filename);
+
+                a = listAdanB[0]; b = listAdanB[1];
+
+                System.out.println();
+                System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
+                matrixTurunan.printMatriks();
+                System.out.println();
+                System.out.println("Nilai a hasil baca file adalah: "+a);
+                System.out.println();
+                System.out.println("Nilai b hasil baca file adalah: "+b);
+
+            }
+        }while (choice != 1 || choice != 2);
+
+
+        
         Matrix matriksX = makeMatriksX(); // Matriks X
         Matrix matrixKali = multiplyMatrix(matriksX.inverseWithAdjMethod(), matrixTurunan); // a = Xinverse * Turunan
-        double[] listAngkaInterpolasi = listAandB(filename);
-        double fab = 0;
 
-        double a = listAngkaInterpolasi[0]; double b = listAngkaInterpolasi[1];
+        double fab = 0;
+        
 
         int idx = 0; // Untuk akses nilai a_ij di matriks hasilKali
         for (int j = 0; j<4; j++){
@@ -1551,13 +1620,8 @@ public class Matrix {
         
         System.out.println();
         System.out.println("Hasil Intepolasi Spline Bicubic dari f("+a+","+b+") adalah "+fab);
-        return fab;
+        
     }
-
-
-
-
-
 
 
 }

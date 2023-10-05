@@ -489,7 +489,12 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
                 reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 6) { // Bicubic Spline Interpolation
                 // Handle choice 6
+                CLEAR_TERMINAL();
+                SHOW_GREETINGS_TO_USER();
+                System.out.println("Welcome to Bicubic Linear Interpolation !");
+                System.out.println("==================================================");
                 Matrix.bicubicSplineInterpolation();
+                reuseConfirmation = REUSE_CONFIRMATION(scanner);
             } else if (mainMenuChoice == 7) { // Terminate the program
                 System.out.println("Thank you for using JUN HOK 88's program. Hope you are helped");
                 System.exit(0);
