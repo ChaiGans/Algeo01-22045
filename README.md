@@ -25,14 +25,14 @@ Repositori ini mengandung program yang diperlukan untuk memenuhi Tugas Besar 1 I
 ## Bahasa yang digunakan
 - Java
 
-## TATA CARA PENGGUNAAN PROGRAM
+## Tata Cara Penggunaan Program
 Pertama, lakukan pengambilan program dari github untuk kemudian dipindahkan ke _local computer_ yang digunakan oleh user dengan menggunakan git clone seperti mekanisme yang terlihat sebagai berikut.
 ```shell
 git clone git@github.com:ChaiGans/Algeo01-22045.git
 ```
 Kemudian, pastikan masuk ke dalam folder yang telah di-_clone_, biasanya akan secara default bernama Algeo01-22045.
 
-### KASUS 1 : Jika anda adalah user dan hanya ingin menggunakan program tanpa modifikasi lebih lanjut terkait algoritma kode yang dimiliki
+### Kasus I : Jika anda adalah user dan hanya ingin menggunakan program tanpa modifikasi lebih lanjut terkait algoritma kode yang dimiliki
 Jika directory anda sudah berada pada folder "Algeo01-22045" tersebut maka lakukan sebagai berikut.
 ```shell
 cd bin
@@ -40,7 +40,7 @@ java Main
 ```
 Maka, sekarang dapat dipastikan bahwa anda sudah berada dalam program yang berjalan dan siap untuk memasukkan input dan menggunakan program.
 
-### KASUS 2 : Jika anda adalah user/developer yang ingin melakukan modifikasi pada program baik dalam fungsi atau prosedur yang digunakan atau mengubah kode yang terdapat pada program utama
+### Kasus II : Jika anda adalah user/developer yang ingin melakukan modifikasi pada program baik dalam fungsi atau prosedur yang digunakan atau mengubah kode yang terdapat pada program utama
 Jika directory anda sudah berada pada folder "Algeo01-22045" tersebut maka lakukan sebagai berikut.
 ```shell
 cd src
@@ -53,3 +53,13 @@ java Main
 
 ## PERHATIAN !!!
 Usahakan melakukan input kepada program dengan sebaik-baiknya sesuai dengan format yang telah ditentukan oleh program karena kesalahan input pada program dapat memicu terjadinya _bug_ pada program ataupun program terhenti seketika meskipun program telah diatur sedemikian rupa untuk dapat meng-_handle_ inputan dari user yang tidak sesuai sehingga program tidak berhenti. Namun, kegiatan tersebut sangat tidak disarankan untuk dilakukan dengan sengaja.
+
+## Links
+- Repository : https://github.com/ChaiGans/Algeo01-22045
+- Issue tracker :
+   - Jika menemukan kesalahan bisa melakukan email kepada elbertchailes888@gmail.com atau melakukan line dengan lineid: elbertchailes
+- Github main contributor :
+   - Contributor 1 - https://github.com/ChaiGans
+   - Contributor 2 - https://github.com/Benardo07
+   - Contributor 3 - https://github.com/Kharris-Khisunica
+   - Guide Assistant - https://github.com/maximatey
