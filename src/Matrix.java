@@ -1539,8 +1539,8 @@ public class Matrix {
 
     //Matriks X, matriks turunan, nilai a dan b sudah ada
 
-    public static void bicubicSplineInterpolation(Scanner scanner){
-        scanner = new Scanner(System.in);
+    public static void bicubicSplineInterpolation(){
+        Scanner scanner = new Scanner(System.in);
         Matrix matrixTurunan = new Matrix();
         double a=0; double b=0;
 
