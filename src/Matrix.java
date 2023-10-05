@@ -1340,7 +1340,7 @@ public class Matrix {
         return string.toString();
     }
 
-    // Bicubic Spline Interpolation
+     // Bicubic Spline Interpolation
 
     // Baca matriks input (4x4) dari file
 
@@ -1356,12 +1356,11 @@ public class Matrix {
             // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel mInput
 
        
-   
             // Then, read and fill the matrix 4x4
-            int i = 0; 
+            int i = 0; int iBaris = 0;
             while (i<16) {
             // i<16 karena dalam file ada matriks 4x4 dan dibawahnya terdapat nilai a dan b
-                int iBaris = 0;
+                
                 String[] inputValues = sc.nextLine().split(" ");
                 for (int iKolom = 0; iKolom < inputValues.length; iKolom++) {
                     mInput.data[iBaris][iKolom] = Double.parseDouble(inputValues[iKolom]);
@@ -1390,7 +1389,7 @@ public class Matrix {
 
     public static Matrix bacamTurunanTerminal(Scanner scanner) {
         // Perulangan (Looping) untuk meminta dan mengisi isian matriks
-        Matrix mInput = new Matrix();
+        Matrix mInput = new Matrix(4,4);
         System.out.println("Masukan matriks turunan: ");
         System.out.println();
         for (int i = 0; i < 4; i++) {
@@ -1524,7 +1523,7 @@ public class Matrix {
             
             System.out.println();
             System.out.println("nilai a dan b adalah: ");
-            System.out.print(aAndB[0]+" ,"+aAndB[1]); // Print a and b
+            System.out.print(aAndB[0]+","+aAndB[1]); // Print a and b
             System.out.println();
            
 
@@ -1563,15 +1562,27 @@ public class Matrix {
                 System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
                 matrixTurunan.printMatriks();
 
+                int flag = 0;
+                while (flag == 0){
                 System.out.println();
                 System.out.println("Masukkan nilai a: ");
-
-                a = scanner.nextDouble();
         
+                a = scanner.nextDouble();
+                if(a>=0 && a<1){
+                    flag++;
+                }
+                }
+                
+                flag = 0;
+                while (flag == 0){
                 System.out.println();
                 System.out.println("Masukkan nilai b: ");
         
                 b = scanner.nextDouble();
+                if(b>=0 && b<1){
+                    flag++;
+                }
+                }
             }
             else if (choice == 2){
                 String filename; // Nama file
@@ -1600,7 +1611,7 @@ public class Matrix {
                 System.out.println("Nilai b hasil baca file adalah: "+b);
 
             }
-        }while (choice != 1 || choice != 2);
+        }while (choice != 1 && choice != 2);
 
 
         
@@ -1622,6 +1633,4 @@ public class Matrix {
         System.out.println("Hasil Intepolasi Spline Bicubic dari f("+a+","+b+") adalah "+fab);
         
     }
-
-
 }
