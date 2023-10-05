@@ -149,6 +149,9 @@ public static Matrix INPUT_MATRIX(int choice, Scanner scanner, int sq) {
             } catch (FileNotFoundException e) {
                 System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
                 System.out.print("Input the filename and don't forget to include .txt: ");
+            } catch (NumberFormatException e) {
+                System.out.println("The matrix has invalid type of data. Make sure your file content is correct");
+                System.out.print("Input the filename and don't forget to include .txt: ");
             }
         }
     }

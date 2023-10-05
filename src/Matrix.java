@@ -42,7 +42,7 @@ public class Matrix {
         }
     }
 
-    public void bacaMatriksDariFile(String filename) throws FileNotFoundException {
+    public void bacaMatriksDariFile(String filename) throws FileNotFoundException, NumberFormatException {
         // Inisialisasi variabel dummyMatrix
         // float[][] dummyMatrix = null;
 
@@ -1548,7 +1548,6 @@ public class Matrix {
         // catch bertujuan untuk menampilkan error kepada user
         } catch (FileNotFoundException e) {
             System.out.println("File "+filename+" not found in this directory.");
-            System.out.println("Program will shut down. Please re-run the program");
         }
         return aAndB;
 
