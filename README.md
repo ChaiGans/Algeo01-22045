@@ -25,9 +25,6 @@ Repositori ini mengandung program yang diperlukan untuk memenuhi Tugas Besar 1 I
 ## Bahasa yang digunakan
 - Java
 
-## PERHATIAN !!!
-Usahakan melakukan input kepada program dengan sebaik-baiknya sesuai dengan format yang telah ditentukan oleh program karena kesalahan input pada program dapat memicu terjadinya bug pada program ataupun program terhenti seketika meskipun program telah diatur sedemikian rupa untuk dapat meng-_handle_ inputan dari user yang tidak sesuai sehingga program tidak berhenti. Namun, kegiatan tersebut sangat tidak disarankan untuk dilakukan dengan sengaja.
-
 ## TATA CARA PENGGUNAAN PROGRAM
 Pertama, lakukan pengambilan program dari github untuk kemudian dipindahkan ke _local computer_ yang digunakan oleh user dengan menggunakan git clone seperti mekanisme yang terlihat sebagai berikut.
 ```shell
@@ -35,32 +32,24 @@ git clone git@github.com:ChaiGans/Algeo01-22045.git
 ```
 Kemudian, pastikan masuk ke dalam folder yang telah di-_clone_, biasanya akan secara default bernama Algeo01-22045.
 
-### KASUS 1 : Jika anda adalah user/developer yang ingin melakukan modifikasi pada program baik dalam fungsi atau prosedur yang digunakan atau mengubah kode yang terdapat pada program utama
+### KASUS 1 : Jika anda adalah user dan hanya ingin menggunakan program tanpa modifikasi lebih lanjut terkait algoritma kode yang dimiliki
 Jika directory anda sudah berada pada folder "Algeo01-22045" tersebut maka lakukan sebagai berikut.
 ```shell
-cd src
-```
-Maka, sekarang kamu akan melihat adanya tiga kode dengan extension .java pada folder tersebut, yaitu Additional.java, Main.java, dan Matrix.java. Dengan code editor yang anda punya, anda bisa melakukan edit kode pada Matrix.java untuk melakukan modifikasi pada fungsi dan prosedur yang dimiliki dan edit kode pada Main.java jika ingin mengubah bentuk tampilan kepada user. Untuk menjalani program, anda bisa menulis command pada terminal sebagai berikut.
-```shell
-javac Main.java
+cd bin
 java Main
 ```
 Maka, sekarang dapat dipastikan bahwa anda sudah berada dalam program yang berjalan dan siap untuk memasukkan input dan menggunakan program.
 
-### KASUS 2 : Jika anda adalah user dan hanya ingin menggunakan program tanpa modifikasi lebih lanjut terkait algoritma kode yang dimiliki
+### KASUS 2 : Jika anda adalah user/developer yang ingin melakukan modifikasi pada program baik dalam fungsi atau prosedur yang digunakan atau mengubah kode yang terdapat pada program utama
+Jika directory anda sudah berada pada folder "Algeo01-22045" tersebut maka lakukan sebagai berikut.
+```shell
+cd src
+```
+Maka, sekarang anda akan melihat adanya tiga kode dengan extension .java pada folder tersebut, yaitu Additional.java, Main.java, dan Matrix.java. Dengan code editor yang anda punya, anda bisa melakukan edit kode pada Matrix.java untuk melakukan modifikasi pada fungsi dan prosedur yang dimiliki dan edit kode pada Main.java jika ingin mengubah bentuk tampilan kepada user. Untuk menjalani program hasil modifikasi anda, anda bisa menulis command pada terminal sebagai berikut.
+```shell
+javac Main.java
+java Main
+```
 
-## Links
-
-Even though this information can be found inside the project on machine-readable
-format like in a .json file, it's good to include a summary of most useful
-links to humans using your project. You can include links like:
-
-- Project homepage: https://your.github.com/awesome-project/
-- Repository: https://github.com/your/awesome-project/
-- Issue tracker: https://github.com/your/awesome-project/issues
-  - In case of sensitive bugs like security vulnerabilities, please contact
-    my@email.com directly instead of using issue tracker. We value your effort
-    to improve the security and privacy of this project!
-- Related projects:
-  - Your other project: https://github.com/your/other-project/
-  - Someone else's project: https://github.com/someones/awesome-project/
+## PERHATIAN !!!
+Usahakan melakukan input kepada program dengan sebaik-baiknya sesuai dengan format yang telah ditentukan oleh program karena kesalahan input pada program dapat memicu terjadinya _bug_ pada program ataupun program terhenti seketika meskipun program telah diatur sedemikian rupa untuk dapat meng-_handle_ inputan dari user yang tidak sesuai sehingga program tidak berhenti. Namun, kegiatan tersebut sangat tidak disarankan untuk dilakukan dengan sengaja.
