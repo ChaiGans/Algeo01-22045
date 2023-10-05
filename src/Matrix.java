@@ -43,8 +43,6 @@ public class Matrix {
     }
 
     public void bacaMatriksDariFile(String filename) throws FileNotFoundException, NumberFormatException {
-        // Inisialisasi variabel dummyMatrix
-        // float[][] dummyMatrix = null;
 
             String pathName = "../test/" + filename;
             File file = new File(pathName);
