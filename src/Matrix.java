@@ -1174,7 +1174,7 @@ public class Matrix {
                 String filename;
                 do {
                     while (true) {
-                        System.out.print("Input the filename and don't forget to include .txt: ");
+                       
                         filename = scanner.nextLine();
 
                         if (!filename.endsWith(".txt")) {
@@ -1188,6 +1188,7 @@ public class Matrix {
                             break; // Exit the loop if the file is successfully read
                         } catch (FileNotFoundException e) {
                             System.out.println("File not found in test folder. Make sure your file is existed in that folder.");
+                            System.out.print("Input the filename and don't forget to include .txt: ");
                             // You can choose to continue the loop or exit the program here based on your requirements.
                         }
                     }
@@ -1631,6 +1632,7 @@ public class Matrix {
         
         System.out.println();
         System.out.println("Hasil Intepolasi Spline Bicubic dari f("+a+","+b+") adalah "+fab);
+        Matrix.OutputToFile(scanner, "Hasil Intepolasi Spline Bicubic dari f("+a+","+b+") adalah "+fab);
         
     }
 }
