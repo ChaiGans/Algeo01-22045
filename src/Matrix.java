@@ -1266,13 +1266,19 @@ public class Matrix {
         strfx.append("f(");
         System.out.println("Please input variable value that want to be predicted: ");
         for(int i = 0; i < predict.length; i++){
-            System.out.print("x" + (i+1) + " = ");
-            Double input = scanner.nextDouble();
-            scanner.nextLine();
-            predict[i] = input;
-            strfx.append(String.format("%.4f", input));
-            if(i != predict.length-1){
-                strfx.append(",");
+            try{
+                System.out.print("x" + (i+1) + " = ");
+                Double input = scanner.nextDouble();
+                scanner.nextLine();
+                predict[i] = input;
+                strfx.append(String.format("%.4f", input));
+                if(i != predict.length-1){
+                    strfx.append(",");
+                }
+            }catch(InputMismatchException e){
+                System.out.println("Invalid input. Please enter a valid numbers.");
+                scanner.nextLine();
+                i--;
             }
         }
         strfx.append(") = ");
@@ -1345,44 +1351,41 @@ public class Matrix {
 
     // Baca matriks input (4x4) dari file
 
-    public static Matrix getmTurunanFile(String filename){
+    public static Matrix getmTurunanFile(String filename) throws FileNotFoundException{
         Matrix mInput = new Matrix(4, 4);
-         try {
-            String pathName = "../test/" + filename;
-            File file = new File(pathName);
+         
+        String pathName = "../test/" + filename;
+        File file = new File(pathName);
 
-            Scanner sc = new Scanner(file);
+        Scanner sc = new Scanner(file);
 
-            // Pembacaan file untuk melakukan parsing yang bertujuan untuk memindahkan
-            // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel mInput
+        // Pembacaan file untuk melakukan parsing yang bertujuan untuk memindahkan
+        // hasil inputan dari txt ke dalam bentuk format matriks dan disimpan dalam variabel mInput
 
-       
-            // Then, read and fill the matrix 4x4
-            int i = 0; int iBaris = 0;
-            while (i<16) {
-            // i<16 karena dalam file ada matriks 4x4 dan dibawahnya terdapat nilai a dan b
-                
-                String[] inputValues = sc.nextLine().split(" ");
-                for (int iKolom = 0; iKolom < inputValues.length; iKolom++) {
-                    mInput.data[iBaris][iKolom] = Double.parseDouble(inputValues[iKolom]);
-                    i++;
-                }
-                iBaris++;
-            }
-
-            sc.close();
+    
+        // Then, read and fill the matrix 4x4
+        int i = 0; int iBaris = 0;
+        while (i<16) {
+        // i<16 karena dalam file ada matriks 4x4 dan dibawahnya terdapat nilai a dan b
             
-            System.out.println();
-            System.out.println("Matrix Inputan:");
-            mInput.printMatriks();
-            System.out.println();
+            String[] inputValues = sc.nextLine().split(" ");
+            for (int iKolom = 0; iKolom < inputValues.length; iKolom++) {
+                mInput.data[iBaris][iKolom] = Double.parseDouble(inputValues[iKolom]);
+                i++;
+            }
+            iBaris++;
+        }
+
+        sc.close();
+        
+        System.out.println();
+        System.out.println("Matrix Inputan:");
+        mInput.printMatriks();
+        System.out.println();
            
 
         // catch bertujuan untuk menampilkan error kepada user
-        } catch (FileNotFoundException e) {
-            System.out.println("File "+filename+" not found in this directory.");
-            System.out.println("Program will shut down. Please re-run the program");
-        }
+        
         return mInput;
     }
 
@@ -1391,13 +1394,27 @@ public class Matrix {
     public static Matrix bacamTurunanTerminal(Scanner scanner) {
         // Perulangan (Looping) untuk meminta dan mengisi isian matriks
         Matrix mInput = new Matrix(4,4);
-        System.out.println("Masukan matriks turunan: ");
-        System.out.println();
+        System.out.println("Please input 4 x 4 derived matrix : ");
         for (int i = 0; i < 4; i++) {
-            String[] inputValues = scanner.nextLine().split(" ");
-            for (int j = 0; j < 4; j++) {
-                mInput.data[i][j] = Double.parseDouble(inputValues[j]);
+            boolean validInput = false;
+            while(!validInput){
+                String[] inputValues = scanner.nextLine().split(" ");
+                if(inputValues.length != 4){
+                    System.out.println("Invalide input. Please provide 4 values seperated by spaces. " );
+                }else{
+                    try{
+                        for (int j = 0; j < 4; j++) {
+                            mInput.data[i][j] = Double.parseDouble(inputValues[j]);
+                        }
+                        validInput = true;
+                    }catch (NumberFormatException e){
+                        System.out.println("Invalid input. Please enter valid numbers. Re Enter that row ");
+                    }
+                    
+                }
+                
             }
+            
         }
         return mInput;
     }
@@ -1542,6 +1559,7 @@ public class Matrix {
     public static void bicubicSplineInterpolation(){
         Scanner scanner = new Scanner(System.in);
         Matrix matrixTurunan = new Matrix();
+        Matrix mInput = null;
         double a=0; double b=0;
 
         System.out.println("How do you want to input your matrix?");
@@ -1552,67 +1570,107 @@ public class Matrix {
         int choice;
 
         do{
-            System.out.println("Masukan Pilihan: ");
-            choice = scanner.nextInt(); scanner.nextLine();
-
-            if (choice == 1){
-                Matrix mInput = bacamTurunanTerminal(scanner);
-                matrixTurunan = transformKeMatriksTurunan(mInput);
-
-                System.out.println();
-                System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
-                matrixTurunan.printMatriks();
-
-                int flag = 0;
-                while (flag == 0){
-                System.out.println();
-                System.out.println("Masukkan nilai a: ");
-        
-                a = scanner.nextDouble();
-                if(a>=0 && a<1){
-                    flag++;
+            try{
+                System.out.print("Masukan Pilihan: ");
+                choice = scanner.nextInt(); scanner.nextLine();
+                if (choice <= 0 || choice > 2){
+                    System.out.println("Please input between 1 or 2.");
                 }
+
+            }catch(InputMismatchException e){
+                System.out.println("Invalid input. Please enter a valid choice ( 1 or 2). ");
+                scanner.nextLine();
+                choice = 0; 
+            }
+         }while (choice != 1 && choice != 2);
+
+        if (choice == 1){
+            mInput = bacamTurunanTerminal(scanner);
+            matrixTurunan = transformKeMatriksTurunan(mInput);
+
+            System.out.println();
+            System.out.println("Derived matrix after trasform shape: ");
+            matrixTurunan.printMatriks();
+
+            int flag = 0;
+            while (flag == 0){
+                System.out.println();
+                try{
+                    System.out.print("Please enter a value : ");
+                    a = scanner.nextDouble();
+                    scanner.nextLine();
+                    if(a>=0 && a<1){
+                        flag++;
+                    }else{
+                        System.out.println("Please enter the correct a ( 0 <= a < 1 )");
+                    }
+                }catch(InputMismatchException e){
+                    System.out.println("Invalid input. Please enter a valid numbers.");
+                    scanner.nextLine();
                 }
                 
-                flag = 0;
-                while (flag == 0){
-                System.out.println();
-                System.out.println("Masukkan nilai b: ");
-        
-                b = scanner.nextDouble();
-                if(b>=0 && b<1){
-                    flag++;
-                }
-                }
             }
-            else if (choice == 2){
-                String filename; // Nama file
-        
-                System.out.print("Masukan nama file yang mengandung matriks turunan dan nilai a dan b. Jangan lupa akhiri dengan .txt: ");
-                do {
+            
+            flag = 0;
+            while (flag == 0){
+                System.out.println();
+                try{
+                    System.out.print("Please enter b value : ");
+                    b = scanner.nextDouble();
+                    scanner.nextLine();
+                    if(b>=0 && b<1){
+                        flag++;
+                    }else{
+                        System.out.println("Please enter the correct b ( 0 <= b < 1 )");
+                    }
+                }catch(InputMismatchException e){
+                    System.out.println("Invalid input. Please enter a valid numbers.");
+                    scanner.nextLine();
+                }
+                
+            }
+        }
+        else if (choice == 2){
+            String filename; // Nama file
+            
+            System.out.print("Input the filename that contains derived matrix, a and b values.Don't forget to include .txt: ");
+            do {
+                while(true){
                     filename = scanner.nextLine();
                     if (!filename.endsWith(".txt")) {
                         System.out.print("Please include '.txt' in the filename. Re-enter the filename: ");
-                        }
-                } while (!filename.endsWith(".txt"));
-        
-                Matrix mInput = getmTurunanFile(filename);
-                matrixTurunan = transformKeMatriksTurunan(mInput);
+                        continue;
+                    }
+                    try{
+                        mInput = new Matrix();
+                        mInput = getmTurunanFile(filename);
+                        break;
+                    } catch (FileNotFoundException e) {
+                        System.out.println("File "+filename+" not found in this directory.");
+                        System.out.print("Input the filename and dont't forget to include .txt: ");
+                    }
+                   
+                }
+                
+            } while (!filename.endsWith(".txt"));
+    
+            
+            matrixTurunan = transformKeMatriksTurunan(mInput);
 
-                double [] listAdanB = listAandB(filename);
+            double [] listAdanB = listAandB(filename);
 
-                a = listAdanB[0]; b = listAdanB[1];
+            a = listAdanB[0]; b = listAdanB[1];
 
-                System.out.println();
-                System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
-                matrixTurunan.printMatriks();
-                System.out.println();
-                System.out.println("Nilai a hasil baca file adalah: "+a);
-                System.out.println();
-                System.out.println("Nilai b hasil baca file adalah: "+b);
+            System.out.println();
+            System.out.println("Matriks Turunan setelah di ubah bentuknya: ");
+            matrixTurunan.printMatriks();
+            System.out.println();
+            System.out.println("Nilai a hasil baca file adalah: "+a);
+            System.out.println();
+            System.out.println("Nilai b hasil baca file adalah: "+b);
 
-            }
-        }while (choice != 1 && choice != 2);
+        }
+       
 
 
         
